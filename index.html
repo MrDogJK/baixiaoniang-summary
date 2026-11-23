@@ -9,7 +9,11 @@
 <meta name="description" content="白娘子的总结小站：把看过的长视频拆成一页能读完的图，每期一个独立网页。">
 <style>
   :root{
-    color-scheme:light;
+    color-scheme:light dark;
+    --track:#efe9da;
+    --duo-good:#f8fbf6;
+    --duo-bad:#fdf7f5;
+    --call:#fbf7ec;
     --paper:#f4f0e5; --card:#fffdf7;
     --ink:#1a1917; --ink2:#4a4438; --muted:#867d6b;
     --line:#e2dac7; --green:#1e4a3c; --green2:#2f6b56;
@@ -100,6 +104,24 @@
   .rv{opacity:0;transform:translateY(12px);transition:opacity .6s ease,transform .6s cubic-bezier(.22,.72,.2,1)}
   .rv.in{opacity:1;transform:none}
   @media (prefers-reduced-motion:reduce){.rv{opacity:1;transform:none;transition:none}html{scroll-behavior:auto}}
+
+  /* ---------- 深色主题（系统深色时启用，避免被浏览器强制反色） ---------- */
+  @media (prefers-color-scheme: dark){
+    :root{
+      --paper:#12110e; --card:#1b1915;
+      --ink:#efe9dc; --ink2:#c6bda9; --muted:#8e8574;
+      --line:#332f26; --green:#7fb79f; --green2:#96c9b2;
+      --red:#e07a6d; --gold:#c9a45f;
+      --track:#2a2620; --duo-good:#17211c; --duo-bad:#241a18; --call:#1f1b13;
+    }
+    body{
+      background:
+        radial-gradient(1100px 620px at 8% -8%, #1a1813 0%, rgba(26,24,19,0) 62%),
+        radial-gradient(900px 520px at 108% 6%, #191712 0%, rgba(25,23,18,0) 58%),
+        var(--paper);
+    }
+    .chapters{background:rgba(18,17,14,.94)}
+  }
 </style>
 </head>
 <body>
