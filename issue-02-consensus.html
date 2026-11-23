@@ -1,0 +1,685 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f4f0e5">
+<meta name="color-scheme" content="light">
+<title>共识为什么能说崩就崩 · 一图流</title>
+<meta name="description" content="9 亿人共用的判断，扣掉冗余只剩 1.4 份独立证据。共识的厚度由独立比特决定，不由人数决定——所以它说崩就崩。">
+<style>
+  :root{
+    color-scheme:light dark;
+    --track:#efe9da;
+    --duo-good:#f8fbf6;
+    --duo-bad:#fdf7f5;
+    --call:#fbf7ec;
+    --paper:#f4f0e5; --card:#fffdf7;
+    --ink:#1a1917; --ink2:#4a4438; --muted:#867d6b;
+    --line:#e2dac7; --green:#1e4a3c; --green2:#2f6b56;
+    --red:#96271f; --gold:#a8843c;
+    --serif:"Noto Serif SC","Source Han Serif SC","Songti SC",STSong,"Times New Roman",serif;
+    --sans:-apple-system,BlinkMacSystemFont,"Noto Sans SC","PingFang SC","Helvetica Neue",Arial,sans-serif;
+  }
+  *,*::before,*::after{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+  body{
+    margin:0;padding:0 18px 72px;color:var(--ink);font-family:var(--sans);
+    font-size:16px;line-height:1.75;-webkit-font-smoothing:antialiased;
+    background:
+      radial-gradient(1100px 620px at 8% -8%, #fffdf5 0%, rgba(255,253,245,0) 62%),
+      radial-gradient(900px 520px at 108% 6%, #efe8d6 0%, rgba(239,232,214,0) 58%),
+      var(--paper);
+  }
+  @media (min-width:760px){ body{padding:0 32px 104px} }
+  main{max-width:780px;margin:0 auto}
+
+  /* ---------- top nav ---------- */
+  .bar{position:fixed;inset:0 0 auto 0;z-index:60}
+  .progress{height:2px;background:transparent}
+  .progress i{display:block;height:100%;background:var(--green);transform:scaleX(0);transform-origin:0 50%}
+  .chapters{background:rgba(244,240,229,.94);backdrop-filter:saturate(1.6) blur(10px);border-bottom:1px solid var(--line)}
+  .chapters .wrap{max-width:780px;margin:0 auto;display:flex;gap:16px;overflow-x:auto;
+    padding:9px 18px;scrollbar-width:none;font-size:11px;letter-spacing:.08em;white-space:nowrap}
+  .chapters .wrap::-webkit-scrollbar{display:none}
+  .chapters a{color:var(--muted);text-decoration:none;flex:none;padding-bottom:2px;border-bottom:1.5px solid transparent}
+  .chapters a.on{color:var(--ink);border-bottom-color:var(--red)}
+  .chapters a.home{color:var(--ink);letter-spacing:.06em;padding-right:14px;margin-right:2px;
+    border-right:1px solid var(--line);border-bottom-color:transparent}
+  .chapters a.home:hover{color:var(--red)}
+  .chapters a:hover{color:var(--ink)}
+  body{padding-top:80px}
+
+  /* ---------- hero ---------- */
+  .hero{padding:18px 0 0}
+  .kicker{display:flex;align-items:center;gap:10px;font-size:11.5px;letter-spacing:.16em;color:var(--muted);flex-wrap:wrap}
+  .kicker .sq{width:6px;height:6px;background:var(--red);flex:none}
+  .kicker .sep{width:18px;height:1px;background:var(--line)}
+  h1{font-family:var(--serif);font-weight:700;margin:20px 0 0;font-size:clamp(28px,7.1vw,48px);
+    line-height:1.26;letter-spacing:.005em;text-wrap:balance}
+  h1 em{font-style:normal;color:var(--green)}
+  .deck{margin:20px 0 0;font-size:16.5px;line-height:1.92;color:var(--ink2);max-width:36em}
+  .deck b{color:var(--ink);font-weight:600;background:linear-gradient(transparent 70%, rgba(47,107,86,.20) 70%)}
+  .hero-stat{margin-top:32px;padding:24px 0 26px;border-top:1px solid var(--ink);
+    border-bottom:1px solid var(--line);display:flex;gap:14px 26px;align-items:flex-start;flex-wrap:wrap}
+  .hero-stat .big{font-family:var(--serif);font-size:clamp(42px,11vw,72px);line-height:.96;
+    color:var(--red);letter-spacing:-.02em;font-variant-numeric:tabular-nums;flex:none}
+  .hero-stat .big small{font-size:.3em;letter-spacing:.06em;margin-left:.12em;color:var(--red);opacity:.75}
+  .hero-stat p{margin:0;flex:1 1 240px;font-size:14px;line-height:1.85;color:var(--ink2)}
+  .hero-stat p span{color:var(--muted)}
+
+  /* ---------- section ---------- */
+  .sec{margin-top:52px;scroll-margin-top:76px}
+  .sec-head{display:flex;gap:14px;align-items:baseline;padding-top:14px;border-top:1px solid var(--ink)}
+  .sec-head .n{font-family:var(--serif);font-size:12px;letter-spacing:.2em;color:var(--gold);flex:none}
+  .sec-head h2{font-family:var(--serif);font-weight:700;margin:0;font-size:clamp(20px,5.1vw,27px);
+    line-height:1.4;text-wrap:balance;min-width:0}
+  .sec-head .en{display:block;font-family:var(--sans);font-size:10.5px;letter-spacing:.18em;
+    color:var(--muted);font-weight:400;margin-top:6px;text-transform:uppercase}
+  p.t{margin:16px 0 0;font-size:15.5px;line-height:1.92;color:var(--ink2)}
+  p.t b{color:var(--ink);font-weight:600}
+  .red{color:var(--red);font-weight:600}
+  .gold{color:var(--gold);font-weight:600}
+  .quote{margin:20px 0 0;padding:2px 0 2px 16px;border-left:2px solid var(--green);
+    font-family:var(--serif);font-size:17px;line-height:1.85;color:var(--green)}
+  .quote small{display:block;margin-top:8px;font-family:var(--sans);font-size:12px;color:var(--muted);letter-spacing:.04em}
+
+  /* ---------- cards ---------- */
+  .card{margin-top:18px;padding:18px 16px;background:var(--card);border:1px solid var(--line);border-radius:3px}
+  .card-h{display:flex;justify-content:space-between;align-items:baseline;gap:2px 12px;margin-bottom:14px;flex-wrap:wrap}
+  .card-h h3{margin:0;font-family:var(--serif);font-size:14.5px;font-weight:700;letter-spacing:.02em;flex:1 1 auto;min-width:0}
+  .card-h span{font-size:11px;color:var(--muted);letter-spacing:.08em;margin-left:auto;text-align:right}
+
+  /* bars */
+  .bars{display:flex;flex-direction:column;gap:13px}
+  .bar-row{display:grid;grid-template-columns:96px 1fr 66px;gap:10px;align-items:center;font-size:12.5px}
+  .bar-row .bl{color:var(--ink2);line-height:1.3}
+  .track{height:14px;background:var(--track);border-radius:2px;overflow:hidden}
+  .track i{display:block;height:100%;width:0;border-radius:2px;background:var(--green);
+    transition:width 1.15s cubic-bezier(.22,.72,.2,1)}
+  .in .track i{width:var(--w)}
+  .bar-row .bv{text-align:right;font-variant-numeric:tabular-nums;color:var(--ink);font-weight:600;font-size:12.5px}
+  .bar-row.gold .track i{background:var(--gold)}
+  .bar-row.red .track i{background:var(--red)}
+  .bar-row.ghost .track i{background:var(--muted)}
+  .gap-note{display:flex;align-items:center;gap:10px;margin-top:14px;padding-top:12px;
+    border-top:1px dashed var(--line);font-size:12px;color:var(--muted);flex-wrap:wrap}
+  .gap-note b{color:var(--red);font-size:13px;font-variant-numeric:tabular-nums}
+
+  /* stats */
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(148px,1fr));gap:10px;margin-top:18px}
+  @media (max-width:560px){ .stats > *:last-child:nth-child(odd){grid-column:1/-1} }
+  .stat{background:var(--card);border:1px solid var(--line);border-radius:3px;padding:14px 13px}
+  .stat .k{font-size:11px;color:var(--muted);letter-spacing:.06em}
+  .stat .v{font-family:var(--serif);font-size:clamp(22px,6vw,30px);line-height:1.2;margin-top:8px;
+    color:var(--green);font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+  .stat .v.red{color:var(--red)}
+  .stat .v.gold{color:var(--gold)}
+  .stat .d{font-size:11.5px;color:var(--ink2);margin-top:7px;line-height:1.6}
+
+  /* timeline */
+  .tl{list-style:none;margin:18px 0 0;padding:0 0 0 20px;border-left:1px solid var(--line)}
+  .tl li{position:relative;padding:0 0 16px 14px}
+  .tl li:last-child{padding-bottom:0}
+  .tl li::before{content:"";position:absolute;left:-25px;top:7px;width:9px;height:9px;
+    border-radius:50%;background:var(--paper);border:1.5px solid var(--muted)}
+  .tl li.key::before{background:var(--red);border-color:var(--red)}
+  .tl .tm{display:block;font-family:var(--serif);font-size:12px;letter-spacing:.1em;color:var(--gold)}
+  .tl p{margin:3px 0 0;font-size:13.5px;line-height:1.75;color:var(--ink2)}
+  .tl p b{color:var(--ink);font-weight:600}
+
+  /* duo */
+  .duo{display:grid;grid-template-columns:1fr;gap:10px;margin-top:18px}
+  @media (min-width:620px){ .duo{grid-template-columns:1fr 1fr} }
+  .duo-col{border:1px solid var(--line);border-radius:3px;padding:16px 14px;background:var(--card);
+    display:flex;flex-direction:column}
+  .duo-col h4{margin:0 0 4px;font-family:var(--serif);font-size:14px}
+  .duo-col .tag{font-size:10.5px;letter-spacing:.14em;margin-bottom:10px}
+  .duo-col.good .tag{color:var(--green2)}
+  .duo-col.bad .tag{color:var(--red)}
+  .duo-col ul{margin:0;padding:0;list-style:none;flex:1}
+  .duo-col li{font-size:13px;line-height:1.7;color:var(--ink2);padding-left:14px;position:relative;margin-top:8px}
+  .duo-col li::before{content:"";position:absolute;left:0;top:.7em;width:4px;height:4px;border-radius:50%;background:var(--muted)}
+  .duo-col.good{border-top:2px solid var(--green);background:var(--duo-good)}
+  .duo-col.bad{border-top:2px solid var(--red);background:var(--duo-bad)}
+  .duo-foot{margin:14px 0 0;padding-top:11px;border-top:1px solid var(--line);
+    font-family:var(--serif);font-size:13px;letter-spacing:.04em}
+  .duo-col.good .duo-foot{color:var(--green)}
+  .duo-col.bad .duo-foot{color:var(--red)}
+
+  /* finding */
+  .finding{margin-top:20px;padding:22px 16px;border:1px solid var(--ink);border-radius:3px;background:var(--card)}
+  .finding .k{font-size:11px;letter-spacing:.18em;color:var(--muted)}
+  .finding .v{font-family:var(--serif);font-size:clamp(36px,9.6vw,52px);line-height:1;color:var(--red);
+    margin-top:10px;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+  .finding .v .from{color:var(--muted);font-size:.62em;text-decoration:line-through;
+    text-decoration-thickness:1px;letter-spacing:0}
+  .finding .v .arrow{color:var(--muted);font-size:.5em;font-weight:400;vertical-align:.18em;margin:0 .12em}
+  .finding p{margin:12px 0 0;font-size:13px;color:var(--ink2);line-height:1.8}
+
+  /* layers */
+  .layers{margin-top:18px;display:flex;flex-direction:column;gap:0}
+  .layer{display:flex;align-items:center;gap:12px;padding:12px 14px;background:var(--card);
+    border:1px solid var(--line);border-radius:3px}
+  .layer .idx{font-family:var(--serif);font-size:11px;color:var(--gold);letter-spacing:.1em;flex:none}
+  .layer h4{margin:0;font-size:13.5px;font-weight:600}
+  .layer p{margin:2px 0 0;font-size:12px;color:var(--muted);line-height:1.6}
+  .times{text-align:center;font-family:var(--serif);font-size:15px;color:var(--gold);line-height:1;padding:5px 0}
+  .layer-out{margin-top:14px;padding:14px;border:1px dashed var(--red);border-radius:3px;
+    color:var(--red);font-size:13.5px;line-height:1.7;text-align:center}
+  .layer-out b{font-family:var(--serif);font-size:15px}
+
+  /* acts */
+  .acts{display:grid;grid-template-columns:repeat(auto-fit,minmax(232px,1fr));gap:10px;margin-top:18px}
+  .act{background:var(--card);border:1px solid var(--line);border-radius:3px;padding:15px 14px}
+  .act .who{font-family:var(--serif);font-size:13px;color:var(--green);letter-spacing:.06em}
+  .act p{margin:8px 0 0;font-size:13px;line-height:1.8;color:var(--ink2)}
+  .act p b{color:var(--ink);font-weight:600}
+
+  /* spark */
+  .spark{margin-top:16px}
+  .spark svg{width:100%;height:auto;display:block}
+  .spark .cap{display:flex;justify-content:space-between;font-size:10.5px;color:var(--muted);
+    margin-top:6px;letter-spacing:.06em}
+
+  /* callout */
+  .call{margin-top:20px;padding:16px 15px;border-left:3px solid var(--gold);background:var(--call);
+    border-radius:0 3px 3px 0;font-size:13.5px;line-height:1.85;color:var(--ink2)}
+  .call b{color:var(--ink)}
+  .call.red{border-left-color:var(--red);background:var(--duo-bad)}
+
+  /* audit */
+  .audit{margin-top:18px;display:grid;gap:10px}
+  .audit .box{background:var(--card);border:1px solid var(--line);border-radius:3px;padding:15px 14px}
+  .audit .box h4{margin:0 0 8px;font-family:var(--serif);font-size:13.5px;display:flex;align-items:center;gap:8px}
+  .audit .box h4 i{width:7px;height:7px;border-radius:50%;flex:none;display:block}
+  .audit .ok h4 i{background:var(--green)}
+  .audit .warn h4 i{background:var(--gold)}
+  .audit .bad h4 i{background:var(--red)}
+  .audit ul{margin:0;padding:0;list-style:none}
+  .audit li{font-size:13px;line-height:1.75;color:var(--ink2);padding-left:14px;position:relative;margin-top:7px}
+  .audit li::before{content:"—";position:absolute;left:0;color:var(--muted)}
+
+  /* table */
+  .tbl{width:100%;border-collapse:collapse;margin-top:14px;font-size:12.5px}
+  .tbl th{text-align:left;font-weight:600;font-size:11px;letter-spacing:.08em;color:var(--muted);
+    padding:8px 6px;border-bottom:1px solid var(--ink)}
+  .tbl td{padding:9px 6px;border-bottom:1px solid var(--line);color:var(--ink2);vertical-align:top;line-height:1.65}
+  .tbl td b{color:var(--ink)}
+  .tbl td.x{color:var(--red)}
+
+  /* footer */
+  footer{margin-top:56px;padding-top:18px;border-top:1px solid var(--line);font-size:11.5px;
+    color:var(--muted);line-height:1.9}
+  footer b{color:var(--ink2);font-weight:600}
+
+  /* reveal */
+  .rv{opacity:0;transform:translateY(14px);transition:opacity .7s ease,transform .7s cubic-bezier(.22,.72,.2,1)}
+  .rv.in{opacity:1;transform:none}
+  @media (prefers-reduced-motion:reduce){
+    .rv{opacity:1;transform:none;transition:none}
+    .track i{transition:none}
+    html{scroll-behavior:auto}
+  }
+
+  /* ---------- 深色主题（系统深色时启用，避免被浏览器强制反色） ---------- */
+  @media (prefers-color-scheme: dark){
+    :root{
+      --paper:#12110e; --card:#1b1915;
+      --ink:#efe9dc; --ink2:#c6bda9; --muted:#8e8574;
+      --line:#332f26; --green:#7fb79f; --green2:#96c9b2;
+      --red:#e07a6d; --gold:#c9a45f;
+      --track:#2a2620; --duo-good:#17211c; --duo-bad:#241a18; --call:#1f1b13;
+    }
+    body{
+      background:
+        radial-gradient(1100px 620px at 8% -8%, #1a1813 0%, rgba(26,24,19,0) 62%),
+        radial-gradient(900px 520px at 108% 6%, #191712 0%, rgba(25,23,18,0) 58%),
+        var(--paper);
+    }
+    .chapters{background:rgba(18,17,14,.94)}
+  }
+</style>
+</head>
+<body>
+<div class="bar">
+  <div class="progress"><i id="pg"></i></div>
+  <nav class="chapters"><div class="wrap" id="nav">
+    <a class="home" href="index.html">← 全部期数</a>
+    <a href="#s1">两种刹车</a><a href="#s2">厚度</a><a href="#s3">冗余</a>
+    <a href="#s4">厚度与重量</a><a href="#s5">同一秒</a><a href="#s6">雪崩</a>
+    <a href="#s7">时间差</a><a href="#s8">定价信号</a><a href="#s9">没有信念</a>
+    <a href="#s10">凸性</a><a href="#s11">可信度</a>
+  </div></nav>
+</div>
+
+<main>
+  <header class="hero">
+    <div class="kicker">
+      <span class="sq"></span><span>视频拆解</span><span class="sep"></span>
+      <span>B 站 · 寒霜之影</span><span class="sep"></span><span>15 分 43 秒</span>
+    </div>
+    <h1>共识为什么<em>说崩就崩</em>？</h1>
+    <p class="deck">
+      一个 9 亿人的共识，为什么比 9 个各自查资料的人更容易崩？
+      因为<b>共识的厚度不由人数决定，而由撑着它的独立证据有多少比特决定</b>。
+      AI 把 9 亿人的厚度压成了 1.4 个人。
+    </p>
+    <div class="hero-stat">
+      <div class="big">1.43<small>份</small></div>
+      <p>9 亿份答案，扣掉冗余之后，等于 <b>1.43 份独立判断</b>。
+        要翻一个 1000 比特的共识，你得拿出更强的证据；<b>要翻 1.4 比特的共识，两个比特就够了</b>。
+        <span>— 相关系数 ρ = 0.7，n 有效 = n / [1 + (n−1)ρ]</span>
+      </p>
+    </div>
+  </header>
+
+  <section class="sec rv" id="s1">
+    <div class="sec-head">
+      <span class="n">01</span>
+      <h2>两种刹车，一个结论<span class="en">Two brakes, one conclusion</span></h2>
+    </div>
+    <p class="t">
+      视频从一个韩国市场的反常现象开场：熔断这种「极端情况才用一次」的机制，今年被反复触发。
+    </p>
+    <div class="stats">
+      <div class="stat"><div class="k">KOSPI 熔断 · 2026 年</div><div class="v red">10 次</div><div class="d">有熔断制度以来一共才触发过 16 次</div></div>
+      <div class="stat"><div class="k">2020 年疫情那年</div><div class="v">2 次</div><div class="d">按「百年一遇」的心情设计的机制，被当成日常用</div></div>
+      <div class="stat"><div class="k">程序化交易的 sidecar</div><div class="v red">51 次</div><div class="d">期货 1 分钟内波动超 5% 就关停 5 分钟</div></div>
+    </div>
+    <div class="call">
+      「每次都是同一个原因，其实也没什么原因」——担心存储芯片需求转弱，加上高位获利了结。
+      <b>故事没变，但共识反复地立起来又塌下去。</b>
+    </div>
+  </section>
+
+  <section class="sec rv" id="s2">
+    <div class="sec-head">
+      <span class="n">02</span>
+      <h2>先把结论放在前面：厚度 = 比特<span class="en">Thickness is measured in bits</span></h2>
+    </div>
+    <p class="t">
+      香农在 1948 年给信息定的单位叫<b>比特</b>：一条消息能把你的不确定性减少多少。一个比特，就是把还没排除的可能性砍掉一半。
+    </p>
+    <div class="call">
+      <b>硬币模型</b>：正面反面各一半，你猜不出来；有人告诉你「是正面」，两种可能剩一种——你拿到了一个比特。<br>
+      推论：<b>一件事发生的概率越小，它真发生的时候给你的比特越多</b>。信息就是惊喜。
+    </div>
+    <p class="t">
+      衡量证据也用这个单位：<b>一个证据把「看多对看空」的赔率翻一倍，就算一个比特</b>。
+      而独立证据的比特可以直接相加——这是整期节目的地基。
+    </p>
+    <div class="duo">
+      <div class="duo-col good">
+        <h4>1000 个分析师各自查资料</h4>
+        <div class="tag">INDEPENDENT · 1000 BITS</div>
+        <ul>
+          <li>每个人一份判断，算 1 比特</li>
+          <li>互不知道对方查了什么 → 证据独立，可相加</li>
+          <li>厚度 = 1000 比特，要翻它得拿出比 1000 比特更强的证据，几乎不可能</li>
+        </ul>
+        <p class="duo-foot">→ 形成得慢，翻得也慢</p>
+      </div>
+      <div class="duo-col bad">
+        <h4>1000 个人问同一个模型</h4>
+        <div class="tag">CORRELATED · 1.4 BITS</div>
+        <ul>
+          <li>同一个问题 → 大概率同一份判断，只是在答案上再调一调</li>
+          <li>中心极限定理之下，最终收敛成正态分布</li>
+          <li>「独立」这两个字消失了，比特也就加不起来</li>
+        </ul>
+        <p class="duo-foot">→ 两个比特就翻了</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec rv" id="s3">
+    <div class="sec-head">
+      <span class="n">03</span>
+      <h2>冗余：9 亿人的共识，等于 1.43 份<span class="en">Redundancy</span></h2>
+    </div>
+    <p class="t">
+      全掷模型时，判断之间的相关系数 ρ = 0.7。它的意思是：<b>你的错误里有七成是大家共用的，只有三成是你自己独立的</b>。
+      各自独立的那三成会互相抵消，共用的七成再多也抵消不掉。
+    </p>
+    <div class="card rv">
+      <div class="card-h"><h3>有效独立份数</h3><span>ρ = 0.7</span></div>
+      <div class="finding" style="margin-top:0;border:0;padding:0;background:transparent">
+        <div class="v" style="font-size:clamp(28px,7vw,40px)">n<sub style="font-size:.5em">有效</sub> = n ÷ [1 + (n−1)ρ]</div>
+        <p>人数 n 往无穷大走，这个值收敛到 <b>1 ÷ ρ ≈ 1.43</b>。所以 9 亿人的共识，厚度就是 <b>1.43 个比特</b>——不是 9 亿。</p>
+      </div>
+      <div class="gap-note">要翻 1000 比特的共识，实力不够；<b>要翻 1.43 比特的共识，两个比特就够</b></div>
+    </div>
+    <div class="quote">
+      共识翻得快，不是因为大家反应快了，而是因为撑着共识的证据变薄了。
+      <small>— 视频 04:13</small>
+    </div>
+  </section>
+
+  <section class="sec rv" id="s4">
+    <div class="sec-head">
+      <span class="n">04</span>
+      <h2>更狠的一层：厚度不变，重量一直涨<span class="en">Thin but heavy</span></h2>
+    </div>
+    <p class="t">
+      人数不增加证据的厚度，但增加证据的<b>重量</b>。9 亿人里每多一个人抄同一份答案，共识一个比特都没多，但压在这份证据上的钱真多了一份。
+    </p>
+    <div class="card rv">
+      <div class="card-h"><h3>同一份薄证据，两种计法</h3><span>门槛 vs 动静</span></div>
+      <div class="bars">
+        <div class="bar-row ghost"><span class="bl">信息比特（决定翻不翻）</span><div class="track"><i style="--w:2%"></i></div><span class="bv">1.43</span></div>
+        <div class="bar-row red"><span class="bl">参与人数（决定翻多狠）</span><div class="track"><i style="--w:100%"></i></div><span class="bv">9 亿</span></div>
+      </div>
+      <div class="gap-note">翻转时要换手的仓位越来越大，而<b>换手只需要同样的两个比特</b></div>
+    </div>
+    <div class="call red">
+      <b>所以共识越大，翻的时候动静越大。</b>信息比特决定翻转的门槛，人数决定翻转的重量——这两个数在旧框架里是一起涨的分母，现在被 AI 拆开了。
+    </div>
+  </section>
+
+  <section class="sec rv" id="s5">
+    <div class="sec-head">
+      <span class="n">05</span>
+      <h2>为什么是同一秒：均匀场<span class="en">Uniform field</span></h2>
+    </div>
+    <p class="t">
+      厚度解释了「好翻」，没解释「为什么一起翻」。这要用 1970 年代之后被拿来算人群态度的<b>伊辛模型</b>：每个人受两股力——群体平均态度（从众权重），和自己拿到的外部信息。
+    </p>
+    <div class="card rv">
+      <div class="card-h"><h3>滞后：扛到临界线，然后一次性翻</h3><span>Hysteresis</span></div>
+      <div class="spark">
+        <svg viewBox="0 0 600 150" role="img" aria-label="滞后回线：外部信息逐渐转坏时群体仍守住看多，越过临界线后一次性翻到看空">
+          <line x1="40" y1="130" x2="580" y2="130" stroke="#e2dac7" stroke-width="1"/>
+          <line x1="40" y1="14" x2="40" y2="130" stroke="#e2dac7" stroke-width="1"/>
+          <path d="M40,34 L300,34 L300,120 L580,120" fill="none" stroke="#1e4a3c" stroke-width="2.4" stroke-linejoin="round"/>
+          <line x1="300" y1="20" x2="300" y2="130" stroke="#96271f" stroke-width="1.4" stroke-dasharray="5 4"/>
+          <circle cx="300" cy="34" r="3.6" fill="#96271f"/>
+          <circle cx="300" cy="120" r="3.6" fill="#96271f"/>
+          <text x="306" y="22" font-size="11" fill="#96271f" font-family="sans-serif">临界线</text>
+          <text x="96" y="26" font-size="11" fill="#867d6b" font-family="sans-serif">群体守住看多（只有少数先翻）</text>
+          <text x="380" y="112" font-size="11" fill="#867d6b" font-family="sans-serif">一次性整体翻空</text>
+          <text x="42" y="146" font-size="10" fill="#867d6b" font-family="sans-serif">外部信息逐渐转坏 →</text>
+        </svg>
+        <div class="cap"><span>横轴：外部信息的恶化程度</span><span>纵轴：群体平均态度</span></div>
+      </div>
+      <div class="gap-note">在临界线上，<b>群体对扰动的响应是无穷大的</b>：一个很小的坏消息，引起的是整个群体翻转</div>
+    </div>
+    <div class="duo">
+      <div class="duo-col bad">
+        <h4>传统：随机场</h4>
+        <div class="tag">STAGGERED</div>
+        <ul>
+          <li>每个人拿到的外部信息各不相同</li>
+          <li>不会同时到达临界线</li>
+          <li>先翻的人形成小团体，再慢慢扩大 → 有先兆、有过程</li>
+        </ul>
+        <p class="duo-foot">→ 像一串多米诺</p>
+      </div>
+      <div class="duo-col bad">
+        <h4>AI：均匀场</h4>
+        <div class="tag">SYNCHRONIZED</div>
+        <ul>
+          <li>同一个认识论预设、同一个训练方向，方差被压小</li>
+          <li>拿到的外部信息大概率是同一份，相关性极高</li>
+          <li>所有人<b>在同一秒穿过临界线</b></li>
+        </ul>
+        <p class="duo-foot">→ 没有先兆，没有过程</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec rv" id="s6">
+    <div class="sec-head">
+      <span class="n">06</span>
+      <h2>雪崩：离散度决定是碎还是塌<span class="en">Avalanche</span></h2>
+    </div>
+    <p class="t">
+      同一条临界线，什么时候被各自越过，取决于每个人手里信息的<b>离散程度</b>。离散度高于某个阈值，翻转是一次次有限大小的雪崩；低于阈值，就是一次无限大的雪崩。
+    </p>
+    <div class="call">
+      <b>AI 做的事情，就是把这个离散度再往下压一压。</b>离散度越低，下一次雪崩越整齐、越深——这也是「模型面板」上那个离散度指标的用法。
+    </div>
+    <div class="card rv">
+      <div class="card-h"><h3>把参与者看成点，同向行动就连一条线</h3><span>渗流模型</span></div>
+      <div class="bars">
+        <div class="bar-row"><span class="bl">平均连线 &lt; 1</span><div class="track"><i style="--w:22%"></i></div><span class="bv">一个峰</span></div>
+        <div class="bar-row red"><span class="bl">平均连线 &gt; 1</span><div class="track"><i style="--w:100%"></i></div><span class="bv">两个峰</span></div>
+      </div>
+      <div class="gap-note">小团体连成<b>巨型团体</b>，涨跌从「集中在零附近」变成「两极分化」——中间的部分反而少了</div>
+    </div>
+    <p class="t">
+      两个人向同一个模型提问，就相当于在他们之间加了一条线。几亿人问同一个模型，加的线就是一个天文数字——<b>巨型团体早就在那儿了</b>。
+    </p>
+  </section>
+
+  <section class="sec rv" id="s7">
+    <div class="sec-head">
+      <span class="n">07</span>
+      <h2>时间差：建要按天，崩要按分钟<span class="en">Asymmetric in time</span></h2>
+    </div>
+    <p class="t">
+      建立共识要靠传播，瓦解不需要。这是两个完全不同量级的过程。
+    </p>
+    <div class="card rv">
+      <div class="card-h"><h3>从 10% 的人信，到 90% 的人信</h3><span>Buzz 传播模型</span></div>
+      <div class="bars">
+        <div class="bar-row ghost"><span class="bl">建共识</span><div class="track"><i style="--w:100%"></i></div><span class="bv">8.8 天</span></div>
+        <div class="bar-row red"><span class="bl">崩共识</span><div class="track"><i style="--w:1%"></i></div><span class="bv">分钟级</span></div>
+      </div>
+      <div class="gap-note">时间 = 4.39 ÷ (模仿系数 + 外部影响系数)；即使传播很快，也要 <b>8.8 天</b>——因为接触需要时间</div>
+    </div>
+    <div class="finding rv">
+      <div class="k">建共识 ÷ 崩共识</div>
+      <div class="v">1300<span class="arrow">–</span>80000<span style="font-size:.4em">倍</span></div>
+      <p>8.8 天 ÷ 10 分钟 ≈ 1300 倍；÷ 10 秒 ≈ 8 万倍。<b>建一个共识需要以天为单位，崩一个共识现在只需要以分钟为单位。</b></p>
+    </div>
+    <div class="card rv">
+      <div class="card-h"><h3>而且翻完之后，回得也快</h3><span>VIX 回落时长</span></div>
+      <div class="bars">
+        <div class="bar-row"><span class="bl">2024-08-05 那次</span><div class="track"><i style="--w:4%"></i></div><span class="bv">7 日</span></div>
+        <div class="bar-row ghost"><span class="bl">同类历史均值</span><div class="track"><i style="--w:100%"></i></div><span class="bv">≈170 日</span></div>
+      </div>
+      <div class="gap-note">VIX 盘中冲到 65.73、收在 38.57，7 个交易日后回到 16.19（历史中位数约 17.6）</div>
+    </div>
+    <div class="call red">
+      <b>快翻快回说明：系统没有在「创造」新状态，只是两个已经存在的稳态之间来回横跳。</b>
+      真正慢的是新造一个分支——比如「AI 资本开支」这个叙事从无到有，是以年计的。
+    </div>
+  </section>
+
+  <section class="sec rv" id="s8">
+    <div class="sec-head">
+      <span class="n">08</span>
+      <h2>崩之前有信号，信号在期权里<span class="en">Pricing signals</span></h2>
+    </div>
+    <p class="t">
+      从期权价格里能反推出市场定价用的概率分布（Breeden-Litzenberger）。共识稳的时候，这个分布是<b>一个峰</b>，压在现价附近。
+    </p>
+    <div class="card rv">
+      <div class="card-h"><h3>翻转临近时，下面深处会长出第二个峰</h3><span>风险中性分布</span></div>
+      <div class="spark">
+        <svg viewBox="0 0 600 140" role="img" aria-label="概率分布示意：稳定时单峰压在现价附近，翻转临近时下方远处出现第二个峰">
+          <line x1="20" y1="120" x2="580" y2="120" stroke="#e2dac7" stroke-width="1"/>
+          <path d="M40,120 C120,120 150,40 210,40 C270,40 300,120 380,120" fill="none" stroke="#1e4a3c" stroke-width="2.2"/>
+          <path d="M380,120 C420,120 440,96 470,96 C500,96 520,120 560,120" fill="none" stroke="#96271f" stroke-width="2" stroke-dasharray="5 4"/>
+          <circle cx="210" cy="40" r="3.4" fill="#1e4a3c"/>
+          <circle cx="470" cy="96" r="3.4" fill="#96271f"/>
+          <text x="150" y="30" font-size="11" fill="#1e4a3c" font-family="sans-serif">现价附近 · 第一个峰</text>
+          <text x="410" y="88" font-size="11" fill="#96271f" font-family="sans-serif">第二峰：看空分支开始被定价</text>
+          <text x="20" y="136" font-size="10" fill="#867d6b" font-family="sans-serif">价格 →</text>
+        </svg>
+        <div class="cap"><span>第二个峰的位置 = 翻转之后价格大概率要去的地方</span></div>
+      </div>
+    </div>
+    <div class="stats">
+      <div class="stat"><div class="k">SKEW 指数 · 现价区间</div><div class="v red">150–160</div><div class="d">衡量为极端下跌买保险愿意付多少钱</div></div>
+      <div class="stat"><div class="k">所处历史分位</div><div class="v">90%</div><div class="d">尾部保险已经在变贵</div></div>
+      <div class="stat"><div class="k">意味着</div><div class="v">已定价</div><div class="d">翻转被市场算进价格里了</div></div>
+    </div>
+    <div class="call">
+      所以这一层的判断标准是：<b>你账本里的翻转概率，得比市场算出来的还高，才有赚头</b>。最上游的输入是离散度——模型答案的离散度、分析师预测的离散度，这两个数越低，下一次雪崩越整齐、越深。
+    </div>
+  </section>
+
+  <section class="sec rv" id="s9">
+    <div class="sec-head">
+      <span class="n">09</span>
+      <h2>最不安的一层：模型没有信念<span class="en">No conviction</span></h2>
+    </div>
+    <p class="t">
+      人的信念也会崩，但信念对人来说是顽固的，<b>崩也是一个过程</b>。模型只看证据，而且架构都相似——它没有信念，所以崩得快。
+    </p>
+    <div class="card rv">
+      <div class="card-h"><h3>连续 25 轮施压，模型放弃正确判断的比例</h3><span>2026-09-08 · 德州农工大学测试</span></div>
+      <div class="bars">
+        <div class="bar-row"><span class="bl">Claude Sonnet（第 5 轮）</span><div class="track"><i style="--w:43%"></i></div><span class="bv">42%</span></div>
+        <div class="bar-row gold"><span class="bl">Claude Sonnet（第 25 轮）</span><div class="track"><i style="--w:74%"></i></div><span class="bv">74%</span></div>
+        <div class="bar-row"><span class="bl">Gemini 3.1（起点）</span><div class="track"><i style="--w:51%"></i></div><span class="bv">51%</span></div>
+        <div class="bar-row red"><span class="bl">Gemini 3.1（终点）</span><div class="track"><i style="--w:97%"></i></div><span class="bv">97%</span></div>
+      </div>
+      <div class="gap-note">你把它往哪边推，它就往哪边偏</div>
+    </div>
+    <div class="call red">
+      欧洲央行 2026 年 5 月 21 日的工作论文：让 Q-learning 的 AI 投资者在模型里互相博弈，结果它们会<b>全部学会一起赎回或撤资</b>。
+      而且反常的是——即便经济基本面是好的，只要有一个 AI 投资者卖出，信心里程碑马上上升。
+      <br><br>结论：<b>AI 时代的金融稳定，可能既取决于经济环境，也同样取决于 AI 架构本身。</b>
+    </div>
+  </section>
+
+  <section class="sec rv" id="s10">
+    <div class="sec-head">
+      <span class="n">10</span>
+      <h2>钱：凸性不会消失，只会转移<span class="en">Convexity moves</span></h2>
+    </div>
+    <p class="t">
+      翻转发生时，有一笔钱是一次性结算的，结算的就是<b>凸性</b>——价格动得越大、赚得越多的那种收益形状。
+    </p>
+    <div class="finding rv">
+      <div class="k">做市商一跳的亏损</div>
+      <div class="v">½<span class="arrow">·</span>Γ<span class="arrow">·</span>(ΔS)<span style="font-size:.7em">²</span></div>
+      <p>价格连续小步时，做市商可以一步步跟着调仓，亏也是小钱；<b>但翻转是一次性跳跃的，中间没有调仓的机会</b>。
+        而且亏损跟跳跃幅度的<b>平方</b>成正比——跳得越大，亏得越不成比例。</p>
+    </div>
+    <div class="acts">
+      <div class="act">
+        <div class="who">谁在亏</div>
+        <p>空 Gamma 的做市商。翻转时他们在最集中的行权价上被迫卖得最狠，价格也最容易掉到那里。</p>
+      </div>
+      <div class="act">
+        <div class="who">谁在赚</div>
+        <p>翻转之前买了期权的人——拿着非线性头寸的人。<b>凸性不会消失，只会从连续调仓的人手里转移过去。</b></p>
+      </div>
+      <div class="act">
+        <div class="who">买在哪</div>
+        <p>分歧消失的时候、实际波动小、期权隐含波动也小的时候——那时候保险最便宜。期限上买<b>前端</b>，当天到期与一周内到期的合约同时是 Gamma 与 Charm 最集中的地方。</p>
+      </div>
+    </div>
+    <div class="card rv">
+      <div class="card-h"><h3>账本价 vs 市场价</h3><span>示例</span></div>
+      <div class="bars">
+        <div class="bar-row"><span class="bl">自己账本算的翻转概率</span><div class="track"><i style="--w:20%"></i></div><span class="bv">20%</span></div>
+        <div class="bar-row ghost"><span class="bl">期权价格里隐含的</span><div class="track"><i style="--w:5%"></i></div><span class="bv">5%</span></div>
+      </div>
+      <div class="gap-note">按 5% 的价钱买 20% 的把握，赚的是这 <b>15% 的差</b>——和「断层」是同一个道理，只是断层变成了概率</div>
+    </div>
+    <div class="call red">
+      <b>这个策略会自己坏掉：</b>一旦买的人多了，第二个峰就会被提前定价，价差消失。
+      所以它其实是一道持续的成本题——需要一直用情绪指标（比如那个「下部比率」）去验算。
+    </div>
+  </section>
+
+  <section class="sec rv" id="s11">
+    <div class="sec-head">
+      <span class="n">11</span>
+      <h2>哪里站得住，哪里要打折<span class="en">What holds up</span></h2>
+    </div>
+    <p class="t">我的判断，不是视频原话。</p>
+    <div class="audit">
+      <div class="box ok">
+        <h4><i></i>站得住</h4>
+        <ul>
+          <li>「厚度的单位是比特」是信息论的标准结论，公式 n/[1+(n−1)ρ] 也是有效样本量的经典形式，不是自己发明的</li>
+          <li>伊辛模型、渗流模型、Breeden-Litzenberger 反推分布，都是有几十年历史的成熟工具</li>
+          <li>「建共识靠传播、崩共识靠同步」这个不对称，在机制上说得通</li>
+        </ul>
+      </div>
+      <div class="box warn">
+        <h4><i></i>要打折</h4>
+        <ul>
+          <li><b>ρ = 0.7 是关键假设</b>：整个 1.43 份的结论都压在它上面。0.5 会变成 2 份，0.9 会变成 1.1 份——厚度对这个数字非常敏感</li>
+          <li><b>8.8 天 ÷ 10 分钟 = 1300 倍</b> 是拿两个不同性质的过程直接相除，量级参考可以，别当精确结论</li>
+          <li><b>具体数字要自己核</b>：KOSPI 熔断次数、VIX 盘中值、SKEW 区间、施压实验的百分比，都是本期节目里的说法，我没独立验证</li>
+        </ul>
+      </div>
+      <div class="box bad">
+        <h4><i></i>一个反问（视频没回答）</h4>
+        <ul>
+          <li>如果 9 亿人真的挤在同一份判断上，那<b>翻转之后这些人一起亏的钱，最后流向了谁</b>？节目说流向「拿非线性头寸的人」，但那是个很小的池子，装不下 9 亿人的损失</li>
+          <li>更现实的问题：<b>流动性</b>。共识崩的时候，如果所有人同时想换手，成交对手盘在哪里——这个比定价更致命</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card rv">
+      <div class="card-h"><h3>转写存疑清单（已按画面字幕校正）</h3><span>Whisper 本地转写</span></div>
+      <table class="tbl">
+        <thead><tr><th>转写原文</th><th>正确内容</th></tr></thead>
+        <tbody>
+          <tr><td class="x">玄结线 / 巡洁线</td><td><b>临界线</b>（相变点）</td></tr>
+          <tr><td class="x">一心模型</td><td><b>伊辛模型</b>（Ising model）</td></tr>
+          <tr><td class="x">智慧</td><td><b>滞后</b>（hysteresis）</td></tr>
+          <tr><td class="x">荣誉</td><td><b>冗余</b>（redundancy）</td></tr>
+          <tr><td class="x">HouseCoup 指数</td><td><b>SKEW 指数</b></td></tr>
+          <tr><td class="x">VEX</td><td><b>VIX</b></td></tr>
+          <tr><td class="x">飞龙 / 非农</td><td><b>非农</b>（数据发布）</td></tr>
+          <tr><td class="x">Britain and the Listenberg</td><td><b>Breeden–Litzenberger</b></td></tr>
+          <tr><td class="x">Call of Sunlight / Gem 3.1</td><td>疑似 <b>Claude Sonnet</b> 与 <b>Gemini 3.1</b>，未核实</td></tr>
+          <tr><td class="x">Khont 与 Bossho（2000）</td><td>疑似 <b>Cont &amp; Bouchaud</b> 的渗流市场模型，未核实</td></tr>
+          <tr><td class="x">三纳斯（1993）</td><td>物理学家名，未核实</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="call">
+      这是系列第 4 期，前三期分别讲「9 亿人共用一份判断」「优势 = 一手信息与模型答案的差」「账本、对手与系统」。
+      <b>没看过前三期也能读，但几处推导是直接引用的，我在这里只补了必要背景。</b>
+    </div>
+  </section>
+
+  <footer>
+    <p><b>来源</b>　B 站 @寒霜之影《共识为什么能说崩就崩？》15 分 43 秒</p>
+    <p><b>方法</b>　手机本地 Whisper 转写（502 段）＋ 31 张关键帧对照画面字幕校正术语；本页为视觉摘要，非逐字复述</p>
+    <p><b>说明</b>　文中「存疑」条目未经独立核实，引用前请自行验证；数据以原视频画面显示为准</p>
+    <p style="margin-top:14px;opacity:.75">白娘子的总结小站 ｜ 整理 · 店小二青青 ｜ 个人自用，不做商业用途 ｜ 2026-11-23</p>
+  </footer>
+</main>
+
+<script>
+(function(){
+  var pg = document.getElementById('pg');
+  function onScroll(){
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    pg.style.transform = 'scaleX(' + (max > 0 ? h.scrollTop / max : 0) + ')';
+  }
+  addEventListener('scroll', onScroll, {passive:true});
+  onScroll();
+  var io = new IntersectionObserver(function(es){
+    es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, {threshold:.14, rootMargin:'0px 0px -8% 0px'});
+  document.querySelectorAll('.rv').forEach(function(el){ io.observe(el); });
+  var links = Array.prototype.slice.call(document.querySelectorAll('#nav a[href^="#s"]'));
+  var secs = links.map(function(a){ return document.querySelector(a.getAttribute('href')); });
+  var navIo = new IntersectionObserver(function(es){
+    es.forEach(function(e){
+      if(!e.isIntersecting) return;
+      var i = secs.indexOf(e.target); if(i < 0) return;
+      links.forEach(function(l){ l.classList.remove('on'); });
+      links[i].classList.add('on');
+      var w = document.querySelector('#nav'), a = links[i];
+      if(w && a){ w.scrollTo({left: a.offsetLeft - w.clientWidth/2 + a.clientWidth/2, behavior:'smooth'}); }
+    });
+  }, {threshold:.01, rootMargin:'-45% 0px -50% 0px'});
+  secs.forEach(function(s){ if(s) navIo.observe(s); });
+})();
+</script>
+</body>
+</html>
