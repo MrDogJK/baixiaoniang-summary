@@ -1,0 +1,644 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f4f0e5">
+<title>当 AI 开始替你管钱 · 一图流</title>
+<meta name="description" content="智能体把「懒得挪钱」搬进了算力预算：320–490 个基点的存款利差、存款 Beta 趋近 1、算法合谋与幽灵 GDP。一份基于 B 站长视频的视觉摘要。">
+<style>
+  :root{
+    --paper:#f4f0e5; --card:#fffdf7;
+    --ink:#1a1917; --ink2:#4a4438; --muted:#867d6b;
+    --line:#e2dac7; --green:#1e4a3c; --green2:#2f6b56;
+    --red:#96271f; --gold:#a8843c;
+    --serif:"Noto Serif SC","Source Han Serif SC","Songti SC",STSong,"Times New Roman",serif;
+    --sans:-apple-system,BlinkMacSystemFont,"Noto Sans SC","PingFang SC","Helvetica Neue",Arial,sans-serif;
+  }
+  *,*::before,*::after{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+  body{
+    margin:0;padding:0 18px 72px;color:var(--ink);font-family:var(--sans);
+    font-size:16px;line-height:1.75;-webkit-font-smoothing:antialiased;
+    background:
+      radial-gradient(1100px 620px at 8% -8%, #fffdf5 0%, rgba(255,253,245,0) 62%),
+      radial-gradient(900px 520px at 108% 6%, #efe8d6 0%, rgba(239,232,214,0) 58%),
+      var(--paper);
+  }
+  @media (min-width:760px){ body{padding:0 32px 104px} }
+  main{max-width:780px;margin:0 auto}
+
+  /* ---------- top nav ---------- */
+  .bar{position:fixed;inset:0 0 auto 0;z-index:60}
+  .progress{height:2px;background:transparent}
+  .progress i{display:block;height:100%;background:var(--green);transform:scaleX(0);transform-origin:0 50%}
+  .chapters{background:rgba(244,240,229,.94);backdrop-filter:saturate(1.6) blur(10px);border-bottom:1px solid var(--line)}
+  .chapters .wrap{max-width:780px;margin:0 auto;display:flex;gap:16px;overflow-x:auto;
+    padding:9px 18px;scrollbar-width:none;font-size:11px;letter-spacing:.08em;white-space:nowrap}
+  .chapters .wrap::-webkit-scrollbar{display:none}
+  .chapters a{color:var(--muted);text-decoration:none;flex:none;padding-bottom:2px;border-bottom:1.5px solid transparent}
+  .chapters a.on{color:var(--ink);border-bottom-color:var(--red)}
+  .chapters a.home{color:var(--ink);letter-spacing:.06em;padding-right:14px;margin-right:2px;
+    border-right:1px solid var(--line);border-bottom-color:transparent}
+  .chapters a.home:hover{color:var(--red)}
+  .chapters a:hover{color:var(--ink)}
+  body{padding-top:80px}
+
+  /* ---------- hero ---------- */
+  .hero{padding:18px 0 0}
+  .kicker{display:flex;align-items:center;gap:10px;font-size:11.5px;letter-spacing:.16em;color:var(--muted);flex-wrap:wrap}
+  .kicker .sq{width:6px;height:6px;background:var(--red);flex:none}
+  .kicker .sep{width:18px;height:1px;background:var(--line)}
+  h1{font-family:var(--serif);font-weight:700;margin:20px 0 0;font-size:clamp(28px,7.1vw,48px);
+    line-height:1.26;letter-spacing:.005em;text-wrap:balance}
+  h1 em{font-style:normal;color:var(--green)}
+  .deck{margin:20px 0 0;font-size:16.5px;line-height:1.92;color:var(--ink2);max-width:36em}
+  .deck b{color:var(--ink);font-weight:600;background:linear-gradient(transparent 70%, rgba(47,107,86,.20) 70%)}
+  .hero-stat{margin-top:32px;padding:24px 0 26px;border-top:1px solid var(--ink);
+    border-bottom:1px solid var(--line);display:flex;gap:14px 26px;align-items:flex-start;flex-wrap:wrap}
+  .hero-stat .big{font-family:var(--serif);font-size:clamp(42px,11vw,72px);line-height:.96;
+    color:var(--red);letter-spacing:-.02em;font-variant-numeric:tabular-nums;flex:none}
+  .hero-stat .big small{font-size:.3em;letter-spacing:.06em;margin-left:.12em;color:var(--red);opacity:.75}
+  .hero-stat p{margin:0;flex:1 1 240px;font-size:14px;line-height:1.85;color:var(--ink2)}
+  .hero-stat p span{color:var(--muted)}
+
+  /* ---------- section ---------- */
+  .sec{margin-top:52px;scroll-margin-top:76px}
+  .sec-head{display:flex;gap:14px;align-items:baseline;padding-top:14px;border-top:1px solid var(--ink)}
+  .sec-head .n{font-family:var(--serif);font-size:12px;letter-spacing:.2em;color:var(--gold);flex:none}
+  .sec-head h2{font-family:var(--serif);font-weight:700;margin:0;font-size:clamp(20px,5.1vw,27px);
+    line-height:1.4;text-wrap:balance;min-width:0}
+  .sec-head .en{display:block;font-family:var(--sans);font-size:10.5px;letter-spacing:.18em;
+    color:var(--muted);font-weight:400;margin-top:6px;text-transform:uppercase}
+  p.t{margin:16px 0 0;font-size:15.5px;line-height:1.92;color:var(--ink2)}
+  p.t b{color:var(--ink);font-weight:600}
+  .red{color:var(--red);font-weight:600}
+  .gold{color:var(--gold);font-weight:600}
+  .quote{margin:20px 0 0;padding:2px 0 2px 16px;border-left:2px solid var(--green);
+    font-family:var(--serif);font-size:17px;line-height:1.85;color:var(--green)}
+  .quote small{display:block;margin-top:8px;font-family:var(--sans);font-size:12px;color:var(--muted);letter-spacing:.04em}
+
+  /* ---------- cards ---------- */
+  .card{margin-top:18px;padding:18px 16px;background:var(--card);border:1px solid var(--line);border-radius:3px}
+  .card-h{display:flex;justify-content:space-between;align-items:baseline;gap:2px 12px;margin-bottom:14px;flex-wrap:wrap}
+  .card-h h3{margin:0;font-family:var(--serif);font-size:14.5px;font-weight:700;letter-spacing:.02em;flex:1 1 auto;min-width:0}
+  .card-h span{font-size:11px;color:var(--muted);letter-spacing:.08em;margin-left:auto;text-align:right}
+
+  /* bars */
+  .bars{display:flex;flex-direction:column;gap:13px}
+  .bar-row{display:grid;grid-template-columns:96px 1fr 66px;gap:10px;align-items:center;font-size:12.5px}
+  .bar-row .bl{color:var(--ink2);line-height:1.3}
+  .track{height:14px;background:#efe9da;border-radius:2px;overflow:hidden}
+  .track i{display:block;height:100%;width:0;border-radius:2px;background:var(--green);
+    transition:width 1.15s cubic-bezier(.22,.72,.2,1)}
+  .in .track i{width:var(--w)}
+  .bar-row .bv{text-align:right;font-variant-numeric:tabular-nums;color:var(--ink);font-weight:600;font-size:12.5px}
+  .bar-row.gold .track i{background:var(--gold)}
+  .bar-row.red .track i{background:var(--red)}
+  .bar-row.ghost .track i{background:var(--muted)}
+  .gap-note{display:flex;align-items:center;gap:10px;margin-top:14px;padding-top:12px;
+    border-top:1px dashed var(--line);font-size:12px;color:var(--muted);flex-wrap:wrap}
+  .gap-note b{color:var(--red);font-size:13px;font-variant-numeric:tabular-nums}
+
+  /* stats */
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(148px,1fr));gap:10px;margin-top:18px}
+  @media (max-width:560px){ .stats > *:last-child:nth-child(odd){grid-column:1/-1} }
+  .stat{background:var(--card);border:1px solid var(--line);border-radius:3px;padding:14px 13px}
+  .stat .k{font-size:11px;color:var(--muted);letter-spacing:.06em}
+  .stat .v{font-family:var(--serif);font-size:clamp(22px,6vw,30px);line-height:1.2;margin-top:8px;
+    color:var(--green);font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+  .stat .v.red{color:var(--red)}
+  .stat .v.gold{color:var(--gold)}
+  .stat .d{font-size:11.5px;color:var(--ink2);margin-top:7px;line-height:1.6}
+
+  /* timeline */
+  .tl{list-style:none;margin:18px 0 0;padding:0 0 0 20px;border-left:1px solid var(--line)}
+  .tl li{position:relative;padding:0 0 16px 14px}
+  .tl li:last-child{padding-bottom:0}
+  .tl li::before{content:"";position:absolute;left:-25px;top:7px;width:9px;height:9px;
+    border-radius:50%;background:var(--paper);border:1.5px solid var(--muted)}
+  .tl li.key::before{background:var(--red);border-color:var(--red)}
+  .tl .tm{display:block;font-family:var(--serif);font-size:12px;letter-spacing:.1em;color:var(--gold)}
+  .tl p{margin:3px 0 0;font-size:13.5px;line-height:1.75;color:var(--ink2)}
+  .tl p b{color:var(--ink);font-weight:600}
+
+  /* duo */
+  .duo{display:grid;grid-template-columns:1fr;gap:10px;margin-top:18px}
+  @media (min-width:620px){ .duo{grid-template-columns:1fr 1fr} }
+  .duo-col{border:1px solid var(--line);border-radius:3px;padding:16px 14px;background:var(--card);
+    display:flex;flex-direction:column}
+  .duo-col h4{margin:0 0 4px;font-family:var(--serif);font-size:14px}
+  .duo-col .tag{font-size:10.5px;letter-spacing:.14em;margin-bottom:10px}
+  .duo-col.good .tag{color:var(--green2)}
+  .duo-col.bad .tag{color:var(--red)}
+  .duo-col ul{margin:0;padding:0;list-style:none;flex:1}
+  .duo-col li{font-size:13px;line-height:1.7;color:var(--ink2);padding-left:14px;position:relative;margin-top:8px}
+  .duo-col li::before{content:"";position:absolute;left:0;top:.7em;width:4px;height:4px;border-radius:50%;background:var(--muted)}
+  .duo-col.good{border-top:2px solid var(--green);background:#f8fbf6}
+  .duo-col.bad{border-top:2px solid var(--red);background:#fdf7f5}
+  .duo-foot{margin:14px 0 0;padding-top:11px;border-top:1px solid var(--line);
+    font-family:var(--serif);font-size:13px;letter-spacing:.04em}
+  .duo-col.good .duo-foot{color:var(--green)}
+  .duo-col.bad .duo-foot{color:var(--red)}
+
+  /* finding */
+  .finding{margin-top:20px;padding:22px 16px;border:1px solid var(--ink);border-radius:3px;background:var(--card)}
+  .finding .k{font-size:11px;letter-spacing:.18em;color:var(--muted)}
+  .finding .v{font-family:var(--serif);font-size:clamp(36px,9.6vw,52px);line-height:1;color:var(--red);
+    margin-top:10px;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+  .finding .v .from{color:var(--muted);font-size:.62em;text-decoration:line-through;
+    text-decoration-thickness:1px;letter-spacing:0}
+  .finding .v .arrow{color:var(--muted);font-size:.5em;font-weight:400;vertical-align:.18em;margin:0 .12em}
+  .finding p{margin:12px 0 0;font-size:13px;color:var(--ink2);line-height:1.8}
+
+  /* layers */
+  .layers{margin-top:18px;display:flex;flex-direction:column;gap:0}
+  .layer{display:flex;align-items:center;gap:12px;padding:12px 14px;background:var(--card);
+    border:1px solid var(--line);border-radius:3px}
+  .layer .idx{font-family:var(--serif);font-size:11px;color:var(--gold);letter-spacing:.1em;flex:none}
+  .layer h4{margin:0;font-size:13.5px;font-weight:600}
+  .layer p{margin:2px 0 0;font-size:12px;color:var(--muted);line-height:1.6}
+  .times{text-align:center;font-family:var(--serif);font-size:15px;color:var(--gold);line-height:1;padding:5px 0}
+  .layer-out{margin-top:14px;padding:14px;border:1px dashed var(--red);border-radius:3px;
+    color:var(--red);font-size:13.5px;line-height:1.7;text-align:center}
+  .layer-out b{font-family:var(--serif);font-size:15px}
+
+  /* acts */
+  .acts{display:grid;grid-template-columns:repeat(auto-fit,minmax(232px,1fr));gap:10px;margin-top:18px}
+  .act{background:var(--card);border:1px solid var(--line);border-radius:3px;padding:15px 14px}
+  .act .who{font-family:var(--serif);font-size:13px;color:var(--green);letter-spacing:.06em}
+  .act p{margin:8px 0 0;font-size:13px;line-height:1.8;color:var(--ink2)}
+  .act p b{color:var(--ink);font-weight:600}
+
+  /* spark */
+  .spark{margin-top:16px}
+  .spark svg{width:100%;height:auto;display:block}
+  .spark .cap{display:flex;justify-content:space-between;font-size:10.5px;color:var(--muted);
+    margin-top:6px;letter-spacing:.06em}
+
+  /* callout */
+  .call{margin-top:20px;padding:16px 15px;border-left:3px solid var(--gold);background:#fbf7ec;
+    border-radius:0 3px 3px 0;font-size:13.5px;line-height:1.85;color:var(--ink2)}
+  .call b{color:var(--ink)}
+  .call.red{border-left-color:var(--red);background:#fdf7f5}
+
+  /* audit */
+  .audit{margin-top:18px;display:grid;gap:10px}
+  .audit .box{background:var(--card);border:1px solid var(--line);border-radius:3px;padding:15px 14px}
+  .audit .box h4{margin:0 0 8px;font-family:var(--serif);font-size:13.5px;display:flex;align-items:center;gap:8px}
+  .audit .box h4 i{width:7px;height:7px;border-radius:50%;flex:none;display:block}
+  .audit .ok h4 i{background:var(--green)}
+  .audit .warn h4 i{background:var(--gold)}
+  .audit .bad h4 i{background:var(--red)}
+  .audit ul{margin:0;padding:0;list-style:none}
+  .audit li{font-size:13px;line-height:1.75;color:var(--ink2);padding-left:14px;position:relative;margin-top:7px}
+  .audit li::before{content:"—";position:absolute;left:0;color:var(--muted)}
+
+  /* table */
+  .tbl{width:100%;border-collapse:collapse;margin-top:14px;font-size:12.5px}
+  .tbl th{text-align:left;font-weight:600;font-size:11px;letter-spacing:.08em;color:var(--muted);
+    padding:8px 6px;border-bottom:1px solid var(--ink)}
+  .tbl td{padding:9px 6px;border-bottom:1px solid var(--line);color:var(--ink2);vertical-align:top;line-height:1.65}
+  .tbl td b{color:var(--ink)}
+  .tbl td.x{color:var(--red)}
+
+  /* footer */
+  footer{margin-top:56px;padding-top:18px;border-top:1px solid var(--line);font-size:11.5px;
+    color:var(--muted);line-height:1.9}
+  footer b{color:var(--ink2);font-weight:600}
+
+  /* reveal */
+  .rv{opacity:0;transform:translateY(14px);transition:opacity .7s ease,transform .7s cubic-bezier(.22,.72,.2,1)}
+  .rv.in{opacity:1;transform:none}
+  @media (prefers-reduced-motion:reduce){
+    .rv{opacity:1;transform:none;transition:none}
+    .track i{transition:none}
+    html{scroll-behavior:auto}
+  }
+</style>
+</head>
+<body>
+<div class="bar">
+  <div class="progress"><i id="pg"></i></div>
+  <nav class="chapters"><div class="wrap" id="nav">
+    <a class="home" href="index.html">← 全部期数</a>
+    <a href="#s1">信号</a><a href="#s2">智能体</a><a href="#s3">有限理性</a>
+    <a href="#s4">机器也懒</a><a href="#s5">谁付钱</a><a href="#s6">合谋</a>
+    <a href="#s7">挤兑</a><a href="#s8">三派</a><a href="#s9">宏观</a>
+    <a href="#s10">同一大脑</a><a href="#s11">可信度</a>
+  </div></nav>
+</div>
+
+<main>
+  <!-- ============ HERO ============ -->
+  <header class="hero">
+    <div class="kicker">
+      <span class="sq"></span><span>视频拆解</span><span class="sep"></span>
+      <span>B 站 · 寒霜之影</span><span class="sep"></span><span>18 分 48 秒</span>
+    </div>
+    <h1>当 AI 开始替你管钱，<br>银行的<em>护城河</em>还能撑多久？</h1>
+    <p class="deck">
+      银行那条利差护城河，本质不是技术、不是牌照，而是<b>客户懒得挪钱</b>。
+      智能体把这份「懒」从人脑搬进了算力预算里——于是护城河从<b>时间问题</b>变成了<b>定价问题</b>：
+      墙挡得住恐慌，挡不住比价。
+    </p>
+    <div class="hero-stat">
+      <div class="big">400<small>基准点</small></div>
+      <p>美国支票账户平均利率 <b>0.1%</b>，货币基金与生息稳定币 <b>3.3%–5%</b>。
+        中间躺着的不是风险溢价，是<b>惰性溢价</b>。
+        <span>— FDIC 数据，视频 09:14 处</span>
+      </p>
+    </div>
+  </header>
+
+  <!-- ============ 1 信号 ============ -->
+  <section class="sec rv" id="s1">
+    <div class="sec-head">
+      <span class="n">01</span>
+      <h2>三周之内，三条信号<span class="en">Three signals in three weeks</span></h2>
+    </div>
+    <p class="t">视频用三条几乎连续发生的事，把「理论推演」变成了「正在发生」。</p>
+    <ol class="tl">
+      <li><span class="tm">09.27 · APOLLO</span><p>首席经济学家 <b>托斯滕·斯洛克</b>发布报告，标题就一句话：<b>「一场智能体下的银行挤兑要来了」</b>。</p></li>
+      <li><span class="tm">10.02 · TRUIST</span><p><b>美国前十大商业银行</b>的策略师算账：美国金融股 9 月跑输标普的幅度，是 <b class="red">1990 年以来最惨的一个月</b>。</p></li>
+      <li class="key"><span class="tm">10.13 · 摩根大通财报会</span><p>CEO <b>杰米·戴蒙</b>当着所有分析师说：外部智能体不管谁家的，<b>一律不许自由操作客户账户</b>——外面可能有成千上万个失控的「流氓智能体」。</p></li>
+    </ol>
+    <div class="call">
+      作者由此下判断：智能体不是在改变商业生态的定价，<b>而是在颠覆「定价基础」的认知</b>。
+    </div>
+  </section>
+
+  <!-- ============ 2 智能体 ============ -->
+  <section class="sec rv" id="s2">
+    <div class="sec-head">
+      <span class="n">02</span>
+      <h2>它已经不是聊天框，是手<span class="en">From chat to action</span></h2>
+    </div>
+    <p class="t">去年之前 AI 还只是聊天工具；今天它能自己开网页、填表、打电话、付钱。<b>能自主执行的，才叫智能体。</b></p>
+    <div class="stats">
+      <div class="stat"><div class="k">一家智能体公司 · 员工</div><div class="v">14 人</div><div class="d">连 App 都没有，发条短信或打个电话就能下单</div></div>
+      <div class="stat"><div class="k">估值 · 一个月内</div><div class="v red">100 亿</div><div class="d">8 月 B 轮 25 亿美元，一个月后再融 10 亿</div></div>
+      <div class="stat"><div class="k">资本押注的标的</div><div class="v">花钱</div><div class="d">不是「会聊天」，是「替你花钱」这个动作</div></div>
+    </div>
+    <div class="call">
+      9 月，微软发布 <b>Muse</b>；OpenAI 发布带云端电脑的通用智能体。方向一致：<b>交给它一个目标，它自己去点</b>。
+    </div>
+  </section>
+
+  <!-- ============ 3 有限理性 ============ -->
+  <section class="sec rv" id="s3">
+    <div class="sec-head">
+      <span class="n">03</span>
+      <h2>企业的利润里，有一笔「忘记税」<span class="en">The price of forgetting</span></h2>
+    </div>
+    <p class="t">
+      经济学起点是西蒙的<b>有限理性</b>：人不是不理性，是没有足够的心智资源一直理性——会累、会忘、懒得比价。
+      「靠你忘了取消才活得下去」的订阅制，就是收割有限理性的标准资产。
+    </p>
+    <div class="card rv">
+      <div class="card-h"><h3>斯坦福：拿一家大型支付网络的全量交易数据算</h3><span>订阅留存变化</span></div>
+      <div class="bars">
+        <div class="bar-row"><span class="bl">平时单月</span><div class="track"><i style="--w:26%"></i></div><span class="bv">−2 pp</span></div>
+        <div class="bar-row red"><span class="bl">换卡当月</span><div class="track"><i style="--w:100%"></i></div><span class="bv">−8 pp+</span></div>
+      </div>
+      <div class="gap-note">信用卡过期换卡，所有自动扣费必须重新手动绑一遍 —— 就是这个动作，让留存掉得<b>整整 4 倍</b></div>
+    </div>
+    <div class="stats">
+      <div class="stat"><div class="k">订阅费里因此白交的比例</div><div class="v red">一半以上</div><div class="d">论文结论：过半订阅支出源于「忘了」，不是「想要」</div></div>
+      <div class="stat"><div class="k">监管真空期</div><div class="v">2 年</div><div class="d">FTC「一键取消规则」被法院以程序瑕疵冻结</div></div>
+      <div class="stat"><div class="k">智能体替用户退订</div><div class="v">1 个月</div><div class="d">视觉理解 + 自动操作，把休眠服务逐个退掉</div></div>
+    </div>
+    <div class="quote">
+      法律上吵了两年没吵成的事，一个智能体一个月就干完了。
+      <small>— 视频 04:08</small>
+    </div>
+  </section>
+
+  <!-- ============ 4 机器也懒 ============ -->
+  <section class="sec rv" id="s4">
+    <div class="sec-head">
+      <span class="n">04</span>
+      <h2>反转：机器也懒，只是懒进了预算<span class="en">Inertia moves into the budget</span></h2>
+    </div>
+    <p class="t">
+      微软研究院的开源模拟市场 <b>Magentic Marketplace</b>：100 个买方智能体对 300 个卖方智能体，自己搜索、自己沟通、自己成交。结果很难看。
+    </p>
+    <div class="stats">
+      <div class="stat"><div class="k">直接接受第一份报价</div><div class="v red">60–100%</div><div class="d">第三位之后的报价几乎从未被选中</div></div>
+      <div class="stat"><div class="k">响应最快者 · 成交优势</div><div class="v">10–30×</div><div class="d">比「质量更好但慢半拍」的卖方高出十到三十倍</div></div>
+      <div class="stat"><div class="k">选择从 3 家扩到 100 家</div><div class="v red">−65%</div><div class="d">消费者福利不升反降</div></div>
+    </div>
+    <div class="finding rv">
+      <div class="k">CLAUDE SONNET 4 · 消费者福利（价值 − 价格）</div>
+      <div class="v"><span class="from">1800</span><span class="arrow">→</span>600</div>
+      <p>搜索范围从 3 家扩到 100 家之后，几乎所有模型「帮用户省钱」的效果都一路下滑。
+        原因很朴素：<b>每看一个网页、每调一次工具，都在烧时间、烧接口费、烧上下文预算</b>——满意就收手。</p>
+    </div>
+    <div class="quote">
+      懒没有消失，只是从人脑搬进了智能体的算力预算里。<br>人脑的懒，变成了算法的省。
+      <small>— 视频 06:02</small>
+    </div>
+  </section>
+
+  <!-- ============ 5 谁付钱 ============ -->
+  <section class="sec rv" id="s5">
+    <div class="sec-head">
+      <span class="n">05</span>
+      <h2>它替谁干活，取决于谁付推理费<span class="en">Who pays, who owns</span></h2>
+    </div>
+    <p class="t">
+      这是整篇论文的地基，也是最容易被忽略的漏洞：前面所有推论，都建立在一个未经证明的前提上——<b>你的智能体，真的站在你这边</b>。
+    </p>
+    <div class="duo">
+      <div class="duo-col good">
+        <h4>你自己付月费</h4>
+        <div class="tag">COST PAID BY YOU</div>
+        <ul>
+          <li>有动力替你广域搜索、逐家比价</li>
+          <li>不成交也不亏，站消费者这边是可持续的</li>
+          <li>代价：你每个月多一笔固定支出</li>
+        </ul>
+        <p class="duo-foot">→ 替你办事</p>
+      </div>
+      <div class="duo-col bad">
+        <h4>免费送你的</h4>
+        <div class="tag">COST PAID BY SELLER</div>
+        <ul>
+          <li>算力成本必须有人付，于是向卖方变现</li>
+          <li>「优先推荐」「回答更快」成了可售卖的竞价位</li>
+          <li>你可能永远不知道自己在被排序</li>
+        </ul>
+        <p class="duo-foot">→ 替商家卖货</p>
+      </div>
+    </div>
+    <div class="call">
+      现实已经发生：<b>OpenAI 在美国测试「赞助商智能体」</b>——用户点了广告，直接进入由广告主付费的对话；
+      另一边 <b>Amazon 直接封锁外部购物与比价智能体</b>，一律拦截。
+      关键词竞价没有消失，它搬到了智能体这边。
+    </div>
+  </section>
+
+  <!-- ============ 6 合谋 ============ -->
+  <section class="sec rv" id="s6">
+    <div class="sec-head">
+      <span class="n">06</span>
+      <h2>卖方也上智能体：合谋藏在权重里<span class="en">Collusion without intent</span></h2>
+    </div>
+    <p class="t">
+      你买方装智能体，卖方会立刻部署算力更强、数据更全的定价与谈判智能体反制。双方在毫秒级你来我往，结果是<b>算法合谋</b>。
+    </p>
+    <div class="card rv">
+      <div class="card-h"><h3>NBER 工作论文：把强化学习塞进定价系统</h3><span>无协议 · 无沟通 · 无意图</span></div>
+      <div class="spark">
+        <svg viewBox="0 0 600 130" role="img" aria-label="价格路径示意：合谋期缓慢抬升，平衡被打破后崩落，随后高频震荡">
+          <line x1="0" y1="120" x2="600" y2="120" stroke="#e2dac7" stroke-width="1"/>
+          <line x1="0" y1="8" x2="0" y2="120" stroke="#e2dac7" stroke-width="1"/>
+          <path d="M0,96 L60,92 L120,86 L180,78 L240,70 L300,64" fill="none" stroke="#1e4a3c" stroke-width="2.2" stroke-linejoin="round"/>
+          <path d="M300,64 L330,58 L355,112" fill="none" stroke="#96271f" stroke-width="2.2" stroke-linejoin="round"/>
+          <path d="M355,112 L385,74 L412,104 L440,66 L468,100 L496,72 L524,98 L552,70 L578,92 L600,78" fill="none" stroke="#96271f" stroke-width="1.6" stroke-dasharray="4 3"/>
+          <circle cx="300" cy="64" r="3.4" fill="#1e4a3c"/>
+          <circle cx="355" cy="112" r="3.4" fill="#96271f"/>
+          <text x="70" y="52" font-size="11" fill="#867d6b" font-family="sans-serif">合谋期：价格缓慢抬升</text>
+          <text x="360" y="32" font-size="11" fill="#96271f" font-family="sans-serif">新入局者打破平衡 → 崩落</text>
+          <text x="400" y="128" font-size="10.5" fill="#867d6b" font-family="sans-serif">高频震荡</text>
+        </svg>
+        <div class="cap"><span>时间 →</span><span>相对价格</span></div>
+      </div>
+    </div>
+    <p class="t">
+      麻烦在于：合谋藏在<b>神经网络权重</b>里，商家自己都解释不了自家定价逻辑。而传统反垄断抓的是「价格协议」与「串谋意图」——<b>这里两个都没有</b>。
+    </p>
+    <div class="call red">
+      <b>连带后果：价格粘性崩塌。</b>价格粘性（菜单成本）正是央行降息能在短期拉动真实产出的前提。
+      当企业智能体实时盯着买方弹性、调价边际成本趋近于零，<b>宏观经济学的地基被撬动</b>。
+    </div>
+  </section>
+
+  <!-- ============ 7 挤兑 ============ -->
+  <section class="sec rv" id="s7">
+    <div class="sec-head">
+      <span class="n">07</span>
+      <h2>挤兑：存款 Beta 从「近乎 0」走向 1<span class="en">Deposit beta goes to one</span></h2>
+    </div>
+    <p class="t">同一套算法逻辑，从买菜延伸到打理家庭存款，就正面撞上了商业银行真正的护城河：<b>低成本的睡眠存款</b>。</p>
+    <div class="card rv">
+      <div class="card-h"><h3>同样的钱，放在哪里</h3><span>FDIC · 平均利率 / 年化</span></div>
+      <div class="bars">
+        <div class="bar-row ghost"><span class="bl">支票账户</span><div class="track"><i style="--w:2%"></i></div><span class="bv">0.1%</span></div>
+        <div class="bar-row ghost"><span class="bl">储蓄账户</span><div class="track"><i style="--w:8%"></i></div><span class="bv">0.4%</span></div>
+        <div class="bar-row gold"><span class="bl">货币市场基金</span><div class="track"><i style="--w:66%"></i></div><span class="bv">3.3%</span></div>
+        <div class="bar-row"><span class="bl">生息稳定币</span><div class="track"><i style="--w:100%"></i></div><span class="bv">5.0%</span></div>
+      </div>
+      <div class="gap-note">中间的无风险利差 <b>320–490 个基点</b>，长期存在只因为三件事都麻烦：开户麻烦、比价麻烦、赚钱麻烦</div>
+    </div>
+    <p class="t">
+      智能体天生靠消灭麻烦生存。用户只要说一句 <b>「把这些钱的收益给我做大」</b>，
+      它就会 24 小时盯着全网利差，把 0.1% 的钱自动挪进 4% 以上的工具里。
+    </p>
+    <div class="card rv">
+      <div class="card-h"><h3>存款 Beta：政策利率每动 1 个单位，储户能拿到多少</h3><span>2022.03 – 2023.07</span></div>
+      <div class="bars">
+        <div class="bar-row gold"><span class="bl">政策利率</span><div class="track"><i style="--w:100%"></i></div><span class="bv">+5.25 pp</span></div>
+        <div class="bar-row ghost"><span class="bl">支票账户利率</span><div class="track"><i style="--w:19%"></i></div><span class="bv">≈1%</span></div>
+        <div class="bar-row red"><span class="bl">智能体介入后</span><div class="track"><i style="--w:100%"></i></div><span class="bv">→ 1.0</span></div>
+      </div>
+      <div class="gap-note">Beta 趋近 1 的意思是：<b>加息多少，就得给储户多少，一分都扣不下来</b>，否则钱当天被搬走</div>
+    </div>
+    <div class="duo">
+      <div class="duo-col bad">
+        <h4>不跟</h4>
+        <div class="tag">LOSE DEPOSITS</div>
+        <ul><li>存款以天为单位流失</li><li>资产负债表收缩</li><li>最终丧失放贷能力</li></ul>
+        <p class="duo-foot">→ 规模没了</p>
+      </div>
+      <div class="duo-col good">
+        <h4>跟</h4>
+        <div class="tag">LOSE MARGIN</div>
+        <ul><li>利差被亲手抹平</li><li>净息差与盈利能力受损</li><li>估值下修</li></ul>
+        <p class="duo-foot">→ 利润没了</p>
+      </div>
+    </div>
+    <div class="call red">
+      这和历史挤兑是两回事：2023 年硅谷银行单日流失 <b>420 亿美元</b>，但那是恐慌驱动、且晚于基本面恶化。
+      智能体挤兑是<b>算数驱动、全天候、完全理性</b>——门口不会有任何人排队。
+    </div>
+  </section>
+
+  <!-- ============ 8 三派 ============ -->
+  <section class="sec rv" id="s8">
+    <div class="sec-head">
+      <span class="n">08</span>
+      <h2>华尔街分三派：筑墙、换轨道、分股份<span class="en">Defend, re-rail, or share</span></h2>
+    </div>
+    <div class="acts">
+      <div class="act">
+        <div class="who">铸墙派 · 摩根大通</div>
+        <p>拒绝外部智能体访问账户（<b>戴蒙</b>：客户授权等于责任转移），同时自建 <b>smart cash</b>，用自己的智能体做利率优化，把收益需求<b>锁在本行</b>。</p>
+      </div>
+      <div class="act">
+        <div class="who">拥抱派 · 贝莱德 / 阿波罗</div>
+        <p>公开拥抱公共区块链与智能体金融：贝莱德把模型组合上链成代币，阿波罗把私募信贷基金<b>全面代币化</b>。赌的是钱<b>绕开银行</b>。</p>
+      </div>
+      <div class="act">
+        <div class="who">合作社派 · OUSD</div>
+        <p>Stripe、Visa、Mastercard、Coinbase、Shopify 合组 <b>Open Standard</b>，上线美元稳定币 OUSD。破局四字：<b>分钱、分股</b>。</p>
+      </div>
+    </div>
+    <div class="card rv">
+      <div class="card-h"><h3>OUSD 怎么让银行「帮着发币」</h3><span>上线即 200+ 机构入局</span></div>
+      <div class="audit" style="margin:0;gap:0">
+        <div class="box" style="border:0;padding:6px 0;background:transparent">
+          <ul>
+            <li>1 美元换 1 OUSD → 底层立刻买美债 → 每年吃 4–5 个点利息</li>
+            <li>平台只收极少手续费，<b>大头利息退给拉来资金的机构</b></li>
+            <li>未来 4–5 年大部分股份直接白送，<b>谁推得多谁拿得多</b></li>
+          </ul>
+        </div>
+      </div>
+      <div class="gap-note">于是矛盾消失：银行既保住客户，又拿到美债利息和原始股 —— <b>被抢存款的威胁，变成了分利息分股份的收益</b></div>
+    </div>
+    <div class="call">
+      <b>基础设施的硬约束</b>：现有金融轨道是为人类低频交互设计的。信用卡跨行交换费 <b>2%–3%</b> 外加固定费用，
+      而智能体一次数据调用只值几美分甚至几分之一美分——<b>手续费比付的钱还贵，根本算不过账</b>。所以支付层必须重建。
+    </div>
+  </section>
+
+  <!-- ============ 9 宏观 ============ -->
+  <section class="sec rv" id="s9">
+    <div class="sec-head">
+      <span class="n">09</span>
+      <h2>宏观分歧：从 0.3% 到「幽灵 GDP」<span class="en">Ghost GDP</span></h2>
+    </div>
+    <p class="t">对同一个 AI，三份研究的结论差了<b>一个数量级以上</b>。</p>
+    <div class="stats">
+      <div class="stat"><div class="k">MIT · 阿西莫格鲁</div><div class="v">0.3–1.16%</div><div class="d">任务分配框架：未来 10 年对 GDP 累计拉动的上限</div></div>
+      <div class="stat"><div class="k">高盛</div><div class="v gold">+7%</div><div class="d">AI 会让全球 GDP 增长</div></div>
+      <div class="stat"><div class="k">弗吉尼亚大学团队</div><div class="v red">翻倍</div><div class="d">GDP 十年累计翻倍，但劳动收入份额断崖式下滑</div></div>
+    </div>
+    <div class="call red">
+      <b>幽灵 GDP</b>：企业把利润不断投到智能体与算力上，总产出与统计 GDP 高速膨胀，
+      <b>但劳动报酬几乎蒸发，新增财富全部归为资本收入</b>。
+      而货币政策在这里几乎无能——它能做的是「别因为盯价格目标而添乱」，分配只能靠财政与税收。
+    </div>
+  </section>
+
+  <!-- ============ 10 同一大脑 ============ -->
+  <section class="sec rv" id="s10">
+    <div class="sec-head">
+      <span class="n">10</span>
+      <h2>最黑的一层：风险来自同一个大脑<span class="en">Cognitive coupling</span></h2>
+    </div>
+    <p class="t">
+      AI 时代的金融脆弱性，<b>不再来自单一机构的模型失效，而是来自全系统的认知耦合</b>。
+      看着都合规、都独立经营，但底层来自同一批模型厂商。
+    </p>
+    <div class="layers">
+      <div class="layer"><span class="idx">L1</span><div><h4>模型层</h4><p>不同机构，同一两家模型厂商；训练数据同源、更新周期同步</p></div></div>
+      <div class="times">×</div>
+      <div class="layer"><span class="idx">L2</span><div><h4>市场层</h4><p>同一个大脑解读市场信号 → 组合调整、授信审批、流动性管理同步行动</p></div></div>
+      <div class="times">×</div>
+      <div class="layer"><span class="idx">L3</span><div><h4>基础设施层</h4><p>全压在同一批云厂商与数据工具商上，且打包在银行采购的软件里，风险台账看不见</p></div></div>
+      <div class="layer-out">三层不是相加，是<b>相乘</b>：一旦风险爆发，同步性会被放大到极致</div>
+    </div>
+    <div class="call">
+      <b>最讽刺的反身性</b>：监管越收紧模型治理，银行越倾向只采购少数几家经认证的头部模型——<b>单家更合规，系统的认知多样性却被打包消灭</b>。
+    </div>
+    <div class="quote">
+      23 年硅谷银行只用了一天，下次可能用不了一分钟，而且还没有人下过命令。
+      <small>— 视频 17:23</small>
+    </div>
+  </section>
+
+  <!-- ============ 11 可信度 ============ -->
+  <section class="sec rv" id="s11">
+    <div class="sec-head">
+      <span class="n">11</span>
+      <h2>这份内容哪里站得住，哪里要打折<span class="en">What holds up</span></h2>
+    </div>
+    <p class="t">这是我看完之后的判断，不是视频里的原话——<b>这一步比记住结论更有用</b>。</p>
+    <div class="audit">
+      <div class="box ok">
+        <h4><i></i>站得住</h4>
+        <ul>
+          <li>「利差来自客户惰性」有硬证据：换卡实验的 8% vs 2%，FDIC 的 0.1% vs 3.3–5%</li>
+          <li>「智能体比价不彻底」有可复现的实验支撑（Magentic Marketplace 的首价偏好）</li>
+          <li>「免费智能体必然向卖方变现」是商业模式的必然，不是猜测</li>
+        </ul>
+      </div>
+      <div class="box warn">
+        <h4><i></i>要打折</h4>
+        <ul>
+          <li><b>时间线</b>：视频里大量「今年 9 月 / 10 月」的相对表述，转写里日期也有明显错漏，年份别当定论</li>
+          <li><b>无法核实的细节</b>：那个「14 人、100 亿美元」的公司名，手机上核不了</li>
+          <li><b>逻辑跳跃</b>：智能体「懒」的证据来自模拟市场；真实世界的监管摩擦、用户对自主操作的信任门槛，都会拖慢进程</li>
+        </ul>
+      </div>
+      <div class="box bad">
+        <h4><i></i>一个反问（原文没回答）</h4>
+        <ul>
+          <li>如果存款 Beta 真的推到 1，银行的利差消失之后，<b>信贷成本由谁承担</b>？</li>
+          <li>存款搬家对储户是好事，但对需要贷款的中小企业，可能意味着更高的利率与更少的额度</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card rv">
+      <div class="card-h"><h3>转写存疑清单（已按画面字幕校正）</h3><span>Whisper 本地转写</span></div>
+      <table class="tbl">
+        <thead><tr><th>转写原文</th><th>正确内容</th></tr></thead>
+        <tbody>
+          <tr><td class="x">Core 24</td><td><b>Claude Sonnet 4</b></td></tr>
+          <tr><td class="x">Trace 的分歧师</td><td><b>Truist 的策略师</b></td></tr>
+          <tr><td class="x">阿卜罗 / 阿博罗</td><td><b>Apollo 阿波罗</b></td></tr>
+          <tr><td class="x">Jimmy Damon</td><td><b>Jamie Dimon 杰米·戴蒙</b></td></tr>
+          <tr><td class="x">利兰·埃纳夫</td><td><b>Liran Einav（斯坦福）</b></td></tr>
+          <tr><td class="x">Instinct-I</td><td><b>存疑</b>，可能是 Instacart，但「14 人」与该公司规模不符</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer>
+    <p><b>来源</b>　B 站 @寒霜之影《当AI开始替你管钱，银行的护城河还能撑多久？》18 分 48 秒</p>
+    <p><b>方法</b>　手机本地 Whisper 转写（649 段）＋ 41 张关键帧对照画面字幕校正术语；本页为视觉摘要，非逐字复述</p>
+    <p><b>说明</b>　文中「存疑」条目未经独立核实，引用前请自行验证；数据以原视频画面显示为准</p>
+    <p style="margin-top:14px;opacity:.75">白娘子的总结小站 ｜ 整理 · 店小二青青 ｜ 个人自用，不做商业用途 ｜ 2026-11-23</p>
+  </footer>
+</main>
+
+<script>
+(function(){
+  var pg = document.getElementById('pg');
+  function onScroll(){
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    var p = max > 0 ? h.scrollTop / max : 0;
+    pg.style.transform = 'scaleX(' + p + ')';
+  }
+  addEventListener('scroll', onScroll, {passive:true});
+  onScroll();
+
+  var io = new IntersectionObserver(function(es){
+    es.forEach(function(e){
+      if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+    });
+  }, {threshold:.14, rootMargin:'0px 0px -8% 0px'});
+  document.querySelectorAll('.rv').forEach(function(el){ io.observe(el); });
+
+  var links = Array.prototype.slice.call(document.querySelectorAll('#nav a'));
+  var secs = links.map(function(a){ return document.querySelector(a.getAttribute('href')); });
+  var navIo = new IntersectionObserver(function(es){
+    es.forEach(function(e){
+      if(!e.isIntersecting) return;
+      var i = secs.indexOf(e.target);
+      if(i < 0) return;
+      links.forEach(function(l){ l.classList.remove('on'); });
+      links[i].classList.add('on');
+      var w = document.querySelector('#nav'), a = links[i];
+      if(w && a){ w.scrollTo({left: a.offsetLeft - w.clientWidth/2 + a.clientWidth/2, behavior:'smooth'}); }
+    });
+  }, {threshold:.01, rootMargin:'-45% 0px -50% 0px'});
+  secs.forEach(function(s){ if(s) navIo.observe(s); });
+})();
+</script>
+</body>
+</html>
