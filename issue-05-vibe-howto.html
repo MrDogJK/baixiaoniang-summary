@@ -1,0 +1,572 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f4f0e5">
+<meta name="color-scheme" content="light">
+<title>如何做 vibe 知识大赏 · 一图流</title>
+<meta name="description" content="一条 124 万播放的视频，2 小时做完，用了不到 10% 的额度。工具、选题、画面、音乐音效、发布，五个环节的具体做法。">
+<style>
+  :root{
+    color-scheme:light dark;
+    --track:#efe9da;
+    --duo-good:#f8fbf6;
+    --duo-bad:#fdf7f5;
+    --call:#fbf7ec;
+    --paper:#f4f0e5; --card:#fffdf7;
+    --ink:#1a1917; --ink2:#4a4438; --muted:#867d6b;
+    --line:#e2dac7; --green:#1e4a3c; --green2:#2f6b56;
+    --red:#96271f; --gold:#a8843c;
+    --serif:"Noto Serif SC","Source Han Serif SC","Songti SC",STSong,"Times New Roman",serif;
+    --sans:-apple-system,BlinkMacSystemFont,"Noto Sans SC","PingFang SC","Helvetica Neue",Arial,sans-serif;
+  }
+  *,*::before,*::after{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+  body{
+    margin:0;padding:0 18px 72px;color:var(--ink);font-family:var(--sans);
+    font-size:16px;line-height:1.75;-webkit-font-smoothing:antialiased;
+    background:
+      radial-gradient(1100px 620px at 8% -8%, #fffdf5 0%, rgba(255,253,245,0) 62%),
+      radial-gradient(900px 520px at 108% 6%, #efe8d6 0%, rgba(239,232,214,0) 58%),
+      var(--paper);
+  }
+  @media (min-width:760px){ body{padding:0 32px 104px} }
+  main{max-width:780px;margin:0 auto}
+
+  /* ---------- top nav ---------- */
+  .bar{position:fixed;inset:0 0 auto 0;z-index:60}
+  .progress{height:2px;background:transparent}
+  .progress i{display:block;height:100%;background:var(--green);transform:scaleX(0);transform-origin:0 50%}
+  .chapters{background:rgba(244,240,229,.94);backdrop-filter:saturate(1.6) blur(10px);border-bottom:1px solid var(--line)}
+  .chapters .wrap{max-width:780px;margin:0 auto;display:flex;gap:16px;overflow-x:auto;
+    padding:9px 18px;scrollbar-width:none;font-size:11px;letter-spacing:.08em;white-space:nowrap}
+  .chapters .wrap::-webkit-scrollbar{display:none}
+  .chapters a{color:var(--muted);text-decoration:none;flex:none;padding-bottom:2px;border-bottom:1.5px solid transparent}
+  .chapters a.on{color:var(--ink);border-bottom-color:var(--red)}
+  .chapters a.home{color:var(--ink);letter-spacing:.06em;padding-right:14px;margin-right:2px;
+    border-right:1px solid var(--line);border-bottom-color:transparent}
+  .chapters a.home:hover{color:var(--red)}
+  .chapters a:hover{color:var(--ink)}
+  body{padding-top:80px}
+
+  /* ---------- hero ---------- */
+  .hero{padding:18px 0 0}
+  .kicker{display:flex;align-items:center;gap:10px;font-size:11.5px;letter-spacing:.16em;color:var(--muted);flex-wrap:wrap}
+  .kicker .sq{width:6px;height:6px;background:var(--red);flex:none}
+  .kicker .sep{width:18px;height:1px;background:var(--line)}
+  h1{font-family:var(--serif);font-weight:700;margin:20px 0 0;font-size:clamp(28px,7.1vw,48px);
+    line-height:1.26;letter-spacing:.005em;text-wrap:balance}
+  h1 em{font-style:normal;color:var(--green)}
+  .deck{margin:20px 0 0;font-size:16.5px;line-height:1.92;color:var(--ink2);max-width:36em}
+  .deck b{color:var(--ink);font-weight:600;background:linear-gradient(transparent 70%, rgba(47,107,86,.20) 70%)}
+  .hero-stat{margin-top:32px;padding:24px 0 26px;border-top:1px solid var(--ink);
+    border-bottom:1px solid var(--line);display:flex;gap:14px 26px;align-items:flex-start;flex-wrap:wrap}
+  .hero-stat .big{font-family:var(--serif);font-size:clamp(42px,11vw,72px);line-height:.96;
+    color:var(--red);letter-spacing:-.02em;font-variant-numeric:tabular-nums;flex:none}
+  .hero-stat .big small{font-size:.3em;letter-spacing:.06em;margin-left:.12em;color:var(--red);opacity:.75}
+  .hero-stat p{margin:0;flex:1 1 240px;font-size:14px;line-height:1.85;color:var(--ink2)}
+  .hero-stat p span{color:var(--muted)}
+
+  /* ---------- section ---------- */
+  .sec{margin-top:52px;scroll-margin-top:76px}
+  .sec-head{display:flex;gap:14px;align-items:baseline;padding-top:14px;border-top:1px solid var(--ink)}
+  .sec-head .n{font-family:var(--serif);font-size:12px;letter-spacing:.2em;color:var(--gold);flex:none}
+  .sec-head h2{font-family:var(--serif);font-weight:700;margin:0;font-size:clamp(20px,5.1vw,27px);
+    line-height:1.4;text-wrap:balance;min-width:0}
+  .sec-head .en{display:block;font-family:var(--sans);font-size:10.5px;letter-spacing:.18em;
+    color:var(--muted);font-weight:400;margin-top:6px;text-transform:uppercase}
+  p.t{margin:16px 0 0;font-size:15.5px;line-height:1.92;color:var(--ink2)}
+  p.t b{color:var(--ink);font-weight:600}
+  .red{color:var(--red);font-weight:600}
+  .gold{color:var(--gold);font-weight:600}
+  .quote{margin:20px 0 0;padding:2px 0 2px 16px;border-left:2px solid var(--green);
+    font-family:var(--serif);font-size:17px;line-height:1.85;color:var(--green)}
+  .quote small{display:block;margin-top:8px;font-family:var(--sans);font-size:12px;color:var(--muted);letter-spacing:.04em}
+
+  /* ---------- cards ---------- */
+  .card{margin-top:18px;padding:18px 16px;background:var(--card);border:1px solid var(--line);border-radius:3px}
+  .card-h{display:flex;justify-content:space-between;align-items:baseline;gap:2px 12px;margin-bottom:14px;flex-wrap:wrap}
+  .card-h h3{margin:0;font-family:var(--serif);font-size:14.5px;font-weight:700;letter-spacing:.02em;flex:1 1 auto;min-width:0}
+  .card-h span{font-size:11px;color:var(--muted);letter-spacing:.08em;margin-left:auto;text-align:right}
+
+  /* bars */
+  .bars{display:flex;flex-direction:column;gap:13px}
+  .bar-row{display:grid;grid-template-columns:96px 1fr 66px;gap:10px;align-items:center;font-size:12.5px}
+  .bar-row .bl{color:var(--ink2);line-height:1.3}
+  .track{height:14px;background:var(--track);border-radius:2px;overflow:hidden}
+  .track i{display:block;height:100%;width:0;border-radius:2px;background:var(--green);
+    transition:width 1.15s cubic-bezier(.22,.72,.2,1)}
+  .in .track i{width:var(--w)}
+  .bar-row .bv{text-align:right;font-variant-numeric:tabular-nums;color:var(--ink);font-weight:600;font-size:12.5px}
+  .bar-row.gold .track i{background:var(--gold)}
+  .bar-row.red .track i{background:var(--red)}
+  .bar-row.ghost .track i{background:var(--muted)}
+  .gap-note{display:flex;align-items:center;gap:10px;margin-top:14px;padding-top:12px;
+    border-top:1px dashed var(--line);font-size:12px;color:var(--muted);flex-wrap:wrap}
+  .gap-note b{color:var(--red);font-size:13px;font-variant-numeric:tabular-nums}
+
+  /* stats */
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(148px,1fr));gap:10px;margin-top:18px}
+  @media (max-width:560px){ .stats > *:last-child:nth-child(odd){grid-column:1/-1} }
+  .stat{background:var(--card);border:1px solid var(--line);border-radius:3px;padding:14px 13px}
+  .stat .k{font-size:11px;color:var(--muted);letter-spacing:.06em}
+  .stat .v{font-family:var(--serif);font-size:clamp(22px,6vw,30px);line-height:1.2;margin-top:8px;
+    color:var(--green);font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+  .stat .v.red{color:var(--red)}
+  .stat .v.gold{color:var(--gold)}
+  .stat .d{font-size:11.5px;color:var(--ink2);margin-top:7px;line-height:1.6}
+
+  /* timeline */
+  .tl{list-style:none;margin:18px 0 0;padding:0 0 0 20px;border-left:1px solid var(--line)}
+  .tl li{position:relative;padding:0 0 16px 14px}
+  .tl li:last-child{padding-bottom:0}
+  .tl li::before{content:"";position:absolute;left:-25px;top:7px;width:9px;height:9px;
+    border-radius:50%;background:var(--paper);border:1.5px solid var(--muted)}
+  .tl li.key::before{background:var(--red);border-color:var(--red)}
+  .tl .tm{display:block;font-family:var(--serif);font-size:12px;letter-spacing:.1em;color:var(--gold)}
+  .tl p{margin:3px 0 0;font-size:13.5px;line-height:1.75;color:var(--ink2)}
+  .tl p b{color:var(--ink);font-weight:600}
+
+  /* duo */
+  .duo{display:grid;grid-template-columns:1fr;gap:10px;margin-top:18px}
+  @media (min-width:620px){ .duo{grid-template-columns:1fr 1fr} }
+  .duo-col{border:1px solid var(--line);border-radius:3px;padding:16px 14px;background:var(--card);
+    display:flex;flex-direction:column}
+  .duo-col h4{margin:0 0 4px;font-family:var(--serif);font-size:14px}
+  .duo-col .tag{font-size:10.5px;letter-spacing:.14em;margin-bottom:10px}
+  .duo-col.good .tag{color:var(--green2)}
+  .duo-col.bad .tag{color:var(--red)}
+  .duo-col ul{margin:0;padding:0;list-style:none;flex:1}
+  .duo-col li{font-size:13px;line-height:1.7;color:var(--ink2);padding-left:14px;position:relative;margin-top:8px}
+  .duo-col li::before{content:"";position:absolute;left:0;top:.7em;width:4px;height:4px;border-radius:50%;background:var(--muted)}
+  .duo-col.good{border-top:2px solid var(--green);background:var(--duo-good)}
+  .duo-col.bad{border-top:2px solid var(--red);background:var(--duo-bad)}
+  .duo-foot{margin:14px 0 0;padding-top:11px;border-top:1px solid var(--line);
+    font-family:var(--serif);font-size:13px;letter-spacing:.04em}
+  .duo-col.good .duo-foot{color:var(--green)}
+  .duo-col.bad .duo-foot{color:var(--red)}
+
+  /* finding */
+  .finding{margin-top:20px;padding:22px 16px;border:1px solid var(--ink);border-radius:3px;background:var(--card)}
+  .finding .k{font-size:11px;letter-spacing:.18em;color:var(--muted)}
+  .finding .v{font-family:var(--serif);font-size:clamp(36px,9.6vw,52px);line-height:1;color:var(--red);
+    margin-top:10px;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+  .finding .v .from{color:var(--muted);font-size:.62em;text-decoration:line-through;
+    text-decoration-thickness:1px;letter-spacing:0}
+  .finding .v .arrow{color:var(--muted);font-size:.5em;font-weight:400;vertical-align:.18em;margin:0 .12em}
+  .finding p{margin:12px 0 0;font-size:13px;color:var(--ink2);line-height:1.8}
+
+  /* layers */
+  .layers{margin-top:18px;display:flex;flex-direction:column;gap:0}
+  .layer{display:flex;align-items:center;gap:12px;padding:12px 14px;background:var(--card);
+    border:1px solid var(--line);border-radius:3px}
+  .layer .idx{font-family:var(--serif);font-size:11px;color:var(--gold);letter-spacing:.1em;flex:none}
+  .layer h4{margin:0;font-size:13.5px;font-weight:600}
+  .layer p{margin:2px 0 0;font-size:12px;color:var(--muted);line-height:1.6}
+  .times{text-align:center;font-family:var(--serif);font-size:15px;color:var(--gold);line-height:1;padding:5px 0}
+  .layer-out{margin-top:14px;padding:14px;border:1px dashed var(--red);border-radius:3px;
+    color:var(--red);font-size:13.5px;line-height:1.7;text-align:center}
+  .layer-out b{font-family:var(--serif);font-size:15px}
+
+  /* acts */
+  .acts{display:grid;grid-template-columns:repeat(auto-fit,minmax(232px,1fr));gap:10px;margin-top:18px}
+  .act{background:var(--card);border:1px solid var(--line);border-radius:3px;padding:15px 14px}
+  .act .who{font-family:var(--serif);font-size:13px;color:var(--green);letter-spacing:.06em}
+  .act p{margin:8px 0 0;font-size:13px;line-height:1.8;color:var(--ink2)}
+  .act p b{color:var(--ink);font-weight:600}
+
+  /* spark */
+  .spark{margin-top:16px}
+  .spark svg{width:100%;height:auto;display:block}
+  .spark .cap{display:flex;justify-content:space-between;font-size:10.5px;color:var(--muted);
+    margin-top:6px;letter-spacing:.06em}
+
+  /* callout */
+  .call{margin-top:20px;padding:16px 15px;border-left:3px solid var(--gold);background:var(--call);
+    border-radius:0 3px 3px 0;font-size:13.5px;line-height:1.85;color:var(--ink2)}
+  .call b{color:var(--ink)}
+  .call.red{border-left-color:var(--red);background:var(--duo-bad)}
+
+  /* audit */
+  .audit{margin-top:18px;display:grid;gap:10px}
+  .audit .box{background:var(--card);border:1px solid var(--line);border-radius:3px;padding:15px 14px}
+  .audit .box h4{margin:0 0 8px;font-family:var(--serif);font-size:13.5px;display:flex;align-items:center;gap:8px}
+  .audit .box h4 i{width:7px;height:7px;border-radius:50%;flex:none;display:block}
+  .audit .ok h4 i{background:var(--green)}
+  .audit .warn h4 i{background:var(--gold)}
+  .audit .bad h4 i{background:var(--red)}
+  .audit ul{margin:0;padding:0;list-style:none}
+  .audit li{font-size:13px;line-height:1.75;color:var(--ink2);padding-left:14px;position:relative;margin-top:7px}
+  .audit li::before{content:"—";position:absolute;left:0;color:var(--muted)}
+
+  /* table */
+  .tbl{width:100%;border-collapse:collapse;margin-top:14px;font-size:12.5px}
+  .tbl th{text-align:left;font-weight:600;font-size:11px;letter-spacing:.08em;color:var(--muted);
+    padding:8px 6px;border-bottom:1px solid var(--ink)}
+  .tbl td{padding:9px 6px;border-bottom:1px solid var(--line);color:var(--ink2);vertical-align:top;line-height:1.65}
+  .tbl td b{color:var(--ink)}
+  .tbl td.x{color:var(--red)}
+
+  /* footer */
+  footer{margin-top:56px;padding-top:18px;border-top:1px solid var(--line);font-size:11.5px;
+    color:var(--muted);line-height:1.9}
+  footer b{color:var(--ink2);font-weight:600}
+
+  /* reveal */
+  .rv{opacity:0;transform:translateY(14px);transition:opacity .7s ease,transform .7s cubic-bezier(.22,.72,.2,1)}
+  .rv.in{opacity:1;transform:none}
+  @media (prefers-reduced-motion:reduce){
+    .rv{opacity:1;transform:none;transition:none}
+    .track i{transition:none}
+    html{scroll-behavior:auto}
+  }
+
+  /* ---------- 深色主题（系统深色时启用，避免被浏览器强制反色） ---------- */
+  @media (prefers-color-scheme: dark){
+    :root{
+      --paper:#12110e; --card:#1b1915;
+      --ink:#efe9dc; --ink2:#c6bda9; --muted:#8e8574;
+      --line:#332f26; --green:#7fb79f; --green2:#96c9b2;
+      --red:#e07a6d; --gold:#c9a45f;
+      --track:#2a2620; --duo-good:#17211c; --duo-bad:#241a18; --call:#1f1b13;
+    }
+    body{
+      background:
+        radial-gradient(1100px 620px at 8% -8%, #1a1813 0%, rgba(26,24,19,0) 62%),
+        radial-gradient(900px 520px at 108% 6%, #191712 0%, rgba(25,23,18,0) 58%),
+        var(--paper);
+    }
+    .chapters{background:rgba(18,17,14,.94)}
+  }
+</style>
+</head>
+<body>
+<div class="bar">
+  <div class="progress"><i id="pg"></i></div>
+  <nav class="chapters"><div class="wrap" id="nav">
+    <a class="home" href="index.html">← 全部期数</a>
+    <a href="#s1">成绩单</a><a href="#s2">工具</a><a href="#s3">第一条消息</a>
+    <a href="#s4">选题</a><a href="#s5">画面</a><a href="#s6">样片与四条毛病</a>
+    <a href="#s7">音乐音效</a><a href="#s8">发布与自省</a><a href="#s9">可信度</a>
+  </div></nav>
+</div>
+
+<main>
+  <header class="hero">
+    <div class="kicker">
+      <span class="sq"></span><span>视频拆解</span><span class="sep"></span>
+      <span>B 站 · 诸葛青人不错</span><span class="sep"></span><span>7 分 4 秒</span>
+    </div>
+    <h1>一条 124 万播放，<br>他用了<em>两个小时</em></h1>
+    <p class="deck">
+      不是讲原理，是讲操作：工具怎么解决、第一条消息怎么写、选题凭什么有的 124 万有的 2000、
+      画面为什么全是代码、音乐怎么卡点、音效去哪找。全部是他自己号的真实数据。
+    </p>
+    <div class="hero-stat">
+      <div class="big">2<small>小时</small></div>
+      <p>从发第一条消息到出最终版。B 站 <b>124 万播放</b>，三天涨 7000 粉，
+        用了订阅额度<b>不到 10%</b>。
+        <span>— 他自己的《挣钱的本质》</span>
+      </p>
+    </div>
+  </header>
+
+  <section class="sec rv" id="s1">
+    <div class="sec-head">
+      <span class="n">01</span>
+      <h2>先看成绩单，再看做法<span class="en">Receipts first</span></h2>
+    </div>
+    <p class="t">
+      他把自己的号摊开给你看：同样的工具、同样的流程，播放量差两个数量级。
+    </p>
+    <div class="card rv">
+      <div class="card-h"><h3>同一个号，四条视频</h3><span>播放量</span></div>
+      <div class="bars">
+        <div class="bar-row"><span class="bl">挣钱的本质</span><div class="track"><i style="--w:100%"></i></div><span class="bv">124 万</span></div>
+        <div class="bar-row gold"><span class="bl">定价的本质</span><div class="track"><i style="--w:3%"></i></div><span class="bv">4 万</span></div>
+        <div class="bar-row gold"><span class="bl">人心的本质（B站）</span><div class="track"><i style="--w:2.5%"></i></div><span class="bv">3 万+</span></div>
+        <div class="bar-row ghost"><span class="bl">曹操 / 徐霞客</span><div class="track"><i style="--w:0.2%"></i></div><span class="bv">~2000</span></div>
+      </div>
+      <div class="gap-note">同样的画面水准，差出 <b>600 倍</b>——他的结论：差别在选题</div>
+    </div>
+  </section>
+
+  <section class="sec rv" id="s2">
+    <div class="sec-head">
+      <span class="n">02</span>
+      <h2>工具：就一个 AI，但门槛在门外<span class="en">Tools</span></h2>
+    </div>
+    <div class="call">
+      <b>「答案就一个：AI。没有 AI 的话，那就不叫 vibe 知识大赏了。」</b>
+      这类视频的画面全是 AI 现场写代码画出来的——模型写代码的本事差一点，画面就差一大截。
+    </div>
+    <div class="card rv">
+      <div class="card-h"><h3>他用的配置</h3><span>画面字幕上的原样</span></div>
+      <div class="bars">
+        <div class="bar-row"><span class="bl">主力</span><div class="track"><i style="--w:100%"></i></div><span class="bv">claude code</span></div>
+        <div class="bar-row"><span class="bl">模型</span><div class="track"><i style="--w:100%"></i></div><span class="bv">opus 5.5</span></div>
+      </div>
+      <div class="gap-note">他说平时用两个模型搭配，另一个名字转写不清（疑似 GPT / Gemini 系列），未核实</div>
+    </div>
+    <div class="call red">
+      <b>国内怎么稳定用上</b>——他的办法是硬办法：找国外的朋友帮忙注册和充值；网络这块在海外租一台云服务器做中转。
+      「这样在国内用，目前一直挺稳的。」
+    </div>
+    <p class="t">
+      这也印证了上一期那位亲历者的说法：<b>门槛不在「做视频」，在「能不能用上」。</b>
+    </p>
+  </section>
+
+  <section class="sec rv" id="s3">
+    <div class="sec-head">
+      <span class="n">03</span>
+      <h2>第一条消息：四个要素，就这么多<span class="en">The first message</span></h2>
+    </div>
+    <p class="t">
+      他把《挣钱的本质》那条发给 AI 的第一条消息整理出来了，就四样东西。<b>不会剪辑、不会写代码，都不影响。</b>
+    </p>
+    <div class="card rv">
+      <div class="card-h"><h3>提示词骨架</h3><span>他说模板放在置顶评论</span></div>
+      <div class="layers">
+        <div class="layer"><span class="idx">01</span><div><h4>一首歌</h4><p>就是参考视频里那首配乐，直接给它 BGM</p></div></div>
+        <div class="times">＋</div>
+        <div class="layer"><span class="idx">02</span><div><h4>参考视频的链接</h4><p>「照这个感觉做」——比形容词有效得多</p></div></div>
+        <div class="times">＋</div>
+        <div class="layer"><span class="idx">03</span><div><h4>内容从哪来</h4><p>他给的是一篇高赞回答，并要求「照着靠谱的资料讲，别自己凭空编观点」</p></div></div>
+        <div class="times">＋</div>
+        <div class="layer"><span class="idx">04</span><div><h4>想要什么效果</h4><p>他写的是：让人看着就很爽</p></div></div>
+      </div>
+      <div class="gap-note">就这几句大白话，分镜、画面、字幕、卡点、导出，全由 AI 来</div>
+    </div>
+    <div class="call">
+      <b>但他会自己再过一遍文案。</b>「因为 AI 也会说错。」——这一句是整段里最容易被忽略、也最重要的一句。
+    </div>
+  </section>
+
+  <section class="sec rv" id="s4">
+    <div class="sec-head">
+      <span class="n">04</span>
+      <h2>选题：能不能让一半人想点进来反驳<span class="en">Choosing the topic</span></h2>
+    </div>
+    <p class="t">
+      他认为工具这关过了之后，大家用的东西都差不多，差的是选题。《挣钱的本质》这个说法很重，刷到的人心里会想「凭什么这么说」，然后忍不住点进来。
+    </p>
+    <div class="duo">
+      <div class="duo-col good">
+        <h4>能挑起争论的题</h4>
+        <div class="tag">PROVOCATIVE</div>
+        <ul>
+          <li>看完觉得说得对 → 顺手点赞</li>
+          <li>觉得胡说 → 去评论区吵两句</li>
+          <li>「有人吵，至少说明有人认真看了」</li>
+        </ul>
+        <p class="duo-foot">→ 124 万</p>
+      </div>
+      <div class="duo-col bad">
+        <h4>看标题没有反驳冲动的题</h4>
+        <div class="tag">NEUTRAL</div>
+        <ul>
+          <li>画面他自己也喜欢</li>
+          <li>但刷到的人心里没有一点想反驳的冲动</li>
+          <li>于是划走</li>
+        </ul>
+        <p class="duo-foot">→ 约 2000</p>
+      </div>
+    </div>
+    <div class="quote">
+      我现在挑选题，就看一件事——这个标题能不能让一半的人想点进来骂我。
+      <small>— 视频 03:22（他自己紧接着补了一句：这是开玩笑的）</small>
+    </div>
+    <div class="call red">
+      这句玩笑话里有真东西：<b>它衡量的不是「对不对」，是「有没有立场冲突」</b>。
+      而立场冲突，恰恰是评论区能跑起来的燃料。
+    </div>
+  </section>
+
+  <section class="sec rv" id="s5">
+    <div class="sec-head">
+      <span class="n">05</span>
+      <h2>画面：不是 AI 生成，是代码画的<span class="en">Code, not generation</span></h2>
+    </div>
+    <p class="t">
+      很多人以为这些画面是 AI 生图做的，其实<b>大部分是代码一笔一笔画出来的</b>。就算要用人物，他也只让 AI 出一张石膏像当参考，再用代码把它撒成三万个粒子。
+    </p>
+    <div class="call">
+      <b>为什么要用代码画</b>：因为代码画的东西，想改哪里就改哪里。字什么时候出来、东西转几圈，都能精确到帧。
+      <span style="color:var(--muted)">——和第 03 期那位讲的是同一个道理，但这里给的是操作层面的理由。</span>
+    </div>
+    <div class="card rv">
+      <div class="card-h"><h3>风格靠图说，不靠嘴说</h3><span>攒自己的风格库</span></div>
+      <div class="bars">
+        <div class="bar-row ghost"><span class="bl">光用文字描述</span><div class="track"><i style="--w:30%"></i></div><span class="bv">很难懂</span></div>
+        <div class="bar-row"><span class="bl">发几张参考图说「照这个感觉」</span><div class="track"><i style="--w:100%"></i></div><span class="bv">准得多</span></div>
+      </div>
+      <div class="gap-note">他的做法：刷到喜欢的画面就截图存着，做新视频时挑几张发过去</div>
+    </div>
+  </section>
+
+  <section class="sec rv" id="s6">
+    <div class="sec-head">
+      <span class="n">06</span>
+      <h2>先做 20 秒样片，再挑四条毛病<span class="en">Sample first</span></h2>
+    </div>
+    <p class="t">
+      最省时间的办法：<b>先让它做开头 20 秒的样片，别一上来就出整条。</b>《挣钱的本质》就是这样——样片对了才做全片。
+      不然它吭哧吭哧做完两分钟，你一看风格不对，时间全白费。
+    </p>
+    <div class="audit">
+      <div class="box warn">
+        <h4><i></i>他最常提的四条修改</h4>
+        <ul>
+          <li><b>开头第一秒先别上字</b>，留点缓冲——不然观众还没看清画面，字就过去了</li>
+          <li><b>满屏闪的特效删掉</b>——看久了眼睛累</li>
+          <li><b>不重要的东西一闪而过就行</b>——停久了会脱节奏</li>
+          <li><b>画面之间别硬切</b>——用同一个东西把前后两个画面串起来</li>
+        </ul>
+      </div>
+    </div>
+    <div class="call">
+      这四条都不是「让 AI 更努力」，而是<b>具体的减法</b>。
+      对比第 03 期那种「先出关键帧、再渲染高清」的流程，这里更像一个人凭手感在改片子。
+    </div>
+  </section>
+
+  <section class="sec rv" id="s7">
+    <div class="sec-head">
+      <span class="n">07</span>
+      <h2>音乐、卡点、音效<span class="en">Sound</span></h2>
+    </div>
+    <p class="t">
+      配乐直接用它给你的那首 BGM——最常用的那首开头小曲，「一听就是那个味道」。<b>但光有歌不够，关键是画面卡在节拍上。</b>
+    </p>
+    <div class="card rv">
+      <div class="card-h"><h3>他的卡点做法</h3><span>三步</span></div>
+      <div class="layers">
+        <div class="layer"><span class="idx">01</span><div><h4>让 AI 先把整首歌的鼓点找出来</h4><p>哪一拍是什么，标出来</p></div></div>
+        <div class="times">↓</div>
+        <div class="layer"><span class="idx">02</span><div><h4>字幕和画面都对着鼓点走</h4><p>字幕在哪一拍出来、画面在哪一拍切</p></div></div>
+        <div class="times">↓</div>
+        <div class="layer"><span class="idx">03</span><div><h4>最炸的那一下留给最重要那句话</h4><p>这是他自己加的一手</p></div></div>
+      </div>
+    </div>
+    <div class="call red">
+      <b>音效反着来</b>：他说 AI 自己做音效，特别喜欢加那种「叮叮咚咚」的声音，听多了又吵又廉价。
+      所以他更推荐去专业音效库找真实录的声音——比如齿轮转动，每转一个齿就咔哒响一下，<b>这种才有质感</b>。
+    </div>
+  </section>
+
+  <section class="sec rv" id="s8">
+    <div class="sec-head">
+      <span class="n">08</span>
+      <h2>发布、自省，和一个提醒<span class="en">Publish &amp; caveats</span></h2>
+    </div>
+    <div class="acts">
+      <div class="act"><div class="who">发布</div><p>B 站投稿分区选<b>知识</b>，带上「vibe 知识大赏」活动话题；做得好的有机会被官方推一把。</p></div>
+      <div class="act"><div class="who">频率</div><p>他说会继续做，但会控制频率——<b>因为 AI 不是万能的，它输出的观点也可能是错的</b>。</p></div>
+      <div class="act"><div class="who">废案率</div><p>一口气让 AI 做了好多期，很多最后没发出来。成片文案或画面太粗糙，他就当废案：要么继续打磨，要么毙掉。</p></div>
+    </div>
+    <div class="call">
+      <b>他说了一句很重的话</b>：市面上很多这类视频，AI 写的文案一个字都不带改的，「看多了真的有点头晕目眩」。
+      ——这话出自一个正在教你做的人，分量不太一样。
+    </div>
+    <div class="call red">
+      <b>还有个现实提醒</b>：等你做出点粉丝，私信里会冒出很多找你合作的人。先看对方有没有蓝 V、是不是官方的人；
+      <b>拿不准的，一律拒绝。</b>
+    </div>
+  </section>
+
+  <section class="sec rv" id="s9">
+    <div class="sec-head">
+      <span class="n">09</span>
+      <h2>我的判断<span class="en">What holds up</span></h2>
+    </div>
+    <div class="audit">
+      <div class="box ok">
+        <h4><i></i>站得住</h4>
+        <ul>
+          <li><b>给的是可执行的东西</b>：四要素提示词、20 秒样片、四条减法、鼓点对齐——每一条今晚就能用</li>
+          <li>他晒了自己的差评数据（2000 播放那两条），不是只挑好的说</li>
+          <li>「先做样片再做全片」和第 03 期「先关键帧再渲染」是同一个工程直觉，两个独立来源互相印证</li>
+        </ul>
+      </div>
+      <div class="box warn">
+        <h4><i></i>要打折</h4>
+        <ul>
+          <li><b>2 小时做一条，是在他已经做了几十条之后</b>。新手按这个预期会严重挫败</li>
+          <li>「124 万」里有平台推流的成分，他归因到「选题够冲」，但没剔除平台变量</li>
+          <li>「找国外朋友注册 + 海外服务器中转」这条路，成本和合规风险他一笔带过</li>
+        </ul>
+      </div>
+      <div class="box bad">
+        <h4><i></i>一个反问（视频没回答）</h4>
+        <ul>
+          <li>如果选题的标准真是「能让一半人想反驳」，那<b>它迟早会把内容推向极端</b>——争议度可度量、正确性不可度量，优化起来一定是前者赢</li>
+          <li>他自己也承认要「控制频率」、反对不改文案——<b>但他教的方法本身，就是在批量生产他抱怨的那种东西</b>。这个矛盾他没处理</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card rv">
+      <div class="card-h"><h3>转写存疑清单（已按画面校正）</h3><span>Whisper 本地转写</span></div>
+      <table class="tbl">
+        <thead><tr><th>转写原文</th><th>正确内容</th></tr></thead>
+        <tbody>
+          <tr><td class="x">Wipe / Wive 知识大赏</td><td><b>vibe 知识大赏</b></td></tr>
+          <tr><td class="x">Cloud</td><td><b>Claude</b>（claude code · opus 5.5）</td></tr>
+          <tr><td class="x">朱可清</td><td>UP 主自称，画面账号名为<b>诸葛青人不错</b></td></tr>
+          <tr><td class="x">Fibre 5.2</td><td>另一个模型名，<b>未核实</b></td></tr>
+          <tr><td class="x">曹铝虫、徐霞克</td><td>疑似<b>曹操、徐霞客</b></td></tr>
+          <tr><td class="x">古典</td><td><b>鼓点</b></td></tr>
+          <tr><td class="x">石膏</td><td><b>石膏像</b>（AI 出的参考图）</td></tr>
+          <tr><td class="x">例子</td><td><b>粒子</b></td></tr>
+          <tr><td class="x">费案</td><td><b>废案</b></td></tr>
+          <tr><td class="x">篮威</td><td><b>蓝 V</b>（官方认证）</td></tr>
+          <tr><td class="x">开制小曲</td><td><b>开头小曲</b></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="call">
+      <b>和前后两期的关系</b>：第 03 期讲原理（为什么代码能出视频），第 04 期讲生态（品类怎么爆、怎么退），
+      这一期讲<b>操作</b>（一条视频从零到发布的具体动作）。三期合起来，是一个完整的东西。
+    </div>
+  </section>
+
+  <footer>
+    <p><b>来源</b>　B 站 @诸葛青人不错《vibe知识大赏：如何做vibe知识大赏》7 分 4 秒</p>
+    <p><b>方法</b>　手机本地 Whisper 转写（255 段）＋ 16 张关键帧校正术语；本页为视觉摘要，非逐字复述</p>
+    <p><b>说明</b>　文中「存疑」条目未经独立核实，引用前请自行验证</p>
+    <p style="margin-top:14px;opacity:.75">白娘子的总结小站 ｜ 整理 · 店小二青青 ｜ 个人自用，不做商业用途 ｜ 2026-11-24</p>
+  </footer>
+</main>
+
+<script>
+(function(){
+  var pg = document.getElementById('pg');
+  function onScroll(){
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    pg.style.transform = 'scaleX(' + (max > 0 ? h.scrollTop / max : 0) + ')';
+  }
+  addEventListener('scroll', onScroll, {passive:true});
+  onScroll();
+  var io = new IntersectionObserver(function(es){
+    es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, {threshold:.14, rootMargin:'0px 0px -8% 0px'});
+  document.querySelectorAll('.rv').forEach(function(el){ io.observe(el); });
+  var links = Array.prototype.slice.call(document.querySelectorAll('#nav a[href^="#s"]'));
+  var secs = links.map(function(a){ return document.querySelector(a.getAttribute('href')); });
+  var navIo = new IntersectionObserver(function(es){
+    es.forEach(function(e){
+      if(!e.isIntersecting) return;
+      var i = secs.indexOf(e.target); if(i < 0) return;
+      links.forEach(function(l){ l.classList.remove('on'); });
+      links[i].classList.add('on');
+      var w = document.querySelector('#nav'), a = links[i];
+      if(w && a){ w.scrollTo({left: a.offsetLeft - w.clientWidth/2 + a.clientWidth/2, behavior:'smooth'}); }
+    });
+  }, {threshold:.01, rootMargin:'-45% 0px -50% 0px'});
+  secs.forEach(function(s){ if(s) navIo.observe(s); });
+})();
+</script>
+</body>
+</html>
