@@ -1,0 +1,529 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f4f0e5">
+<meta name="color-scheme" content="light">
+<title>手机养 token 自由 · 一图流</title>
+<meta name="description" content="用一个控制台的签到积分，经本地网关桥接给 DSH Go 等客户端：13 积分约 300 万 token。步骤、两个地址坑、以及明文密钥的风险。">
+<style>
+  :root{
+    color-scheme:light dark;
+    --track:#efe9da;
+    --duo-good:#f8fbf6;
+    --duo-bad:#fdf7f5;
+    --call:#fbf7ec;
+    --paper:#f4f0e5; --card:#fffdf7;
+    --ink:#1a1917; --ink2:#4a4438; --muted:#867d6b;
+    --line:#e2dac7; --green:#1e4a3c; --green2:#2f6b56;
+    --red:#96271f; --gold:#a8843c;
+    --serif:"Noto Serif SC","Source Han Serif SC","Songti SC",STSong,"Times New Roman",serif;
+    --sans:-apple-system,BlinkMacSystemFont,"Noto Sans SC","PingFang SC","Helvetica Neue",Arial,sans-serif;
+  }
+  *,*::before,*::after{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+  body{
+    margin:0;padding:0 18px 72px;color:var(--ink);font-family:var(--sans);
+    font-size:16px;line-height:1.75;-webkit-font-smoothing:antialiased;
+    background:
+      radial-gradient(1100px 620px at 8% -8%, #fffdf5 0%, rgba(255,253,245,0) 62%),
+      radial-gradient(900px 520px at 108% 6%, #efe8d6 0%, rgba(239,232,214,0) 58%),
+      var(--paper);
+  }
+  @media (min-width:760px){ body{padding:0 32px 104px} }
+  main{max-width:780px;margin:0 auto}
+
+  /* ---------- top nav ---------- */
+  .bar{position:fixed;inset:0 0 auto 0;z-index:60}
+  .progress{height:2px;background:transparent}
+  .progress i{display:block;height:100%;background:var(--green);transform:scaleX(0);transform-origin:0 50%}
+  .chapters{background:rgba(244,240,229,.94);backdrop-filter:saturate(1.6) blur(10px);border-bottom:1px solid var(--line)}
+  .chapters .wrap{max-width:780px;margin:0 auto;display:flex;gap:16px;overflow-x:auto;
+    padding:9px 18px;scrollbar-width:none;font-size:11px;letter-spacing:.08em;white-space:nowrap}
+  .chapters .wrap::-webkit-scrollbar{display:none}
+  .chapters a{color:var(--muted);text-decoration:none;flex:none;padding-bottom:2px;border-bottom:1.5px solid transparent}
+  .chapters a.on{color:var(--ink);border-bottom-color:var(--red)}
+  .chapters a.home{color:var(--ink);letter-spacing:.06em;padding-right:14px;margin-right:2px;
+    border-right:1px solid var(--line);border-bottom-color:transparent}
+  .chapters a.home:hover{color:var(--red)}
+  .chapters a:hover{color:var(--ink)}
+  body{padding-top:80px}
+
+  /* ---------- hero ---------- */
+  .hero{padding:18px 0 0}
+  .kicker{display:flex;align-items:center;gap:10px;font-size:11.5px;letter-spacing:.16em;color:var(--muted);flex-wrap:wrap}
+  .kicker .sq{width:6px;height:6px;background:var(--red);flex:none}
+  .kicker .sep{width:18px;height:1px;background:var(--line)}
+  h1{font-family:var(--serif);font-weight:700;margin:20px 0 0;font-size:clamp(28px,7.1vw,48px);
+    line-height:1.26;letter-spacing:.005em;text-wrap:balance}
+  h1 em{font-style:normal;color:var(--green)}
+  .deck{margin:20px 0 0;font-size:16.5px;line-height:1.92;color:var(--ink2);max-width:36em}
+  .deck b{color:var(--ink);font-weight:600;background:linear-gradient(transparent 70%, rgba(47,107,86,.20) 70%)}
+  .hero-stat{margin-top:32px;padding:24px 0 26px;border-top:1px solid var(--ink);
+    border-bottom:1px solid var(--line);display:flex;gap:14px 26px;align-items:flex-start;flex-wrap:wrap}
+  .hero-stat .big{font-family:var(--serif);font-size:clamp(42px,11vw,72px);line-height:.96;
+    color:var(--red);letter-spacing:-.02em;font-variant-numeric:tabular-nums;flex:none}
+  .hero-stat .big small{font-size:.3em;letter-spacing:.06em;margin-left:.12em;color:var(--red);opacity:.75}
+  .hero-stat p{margin:0;flex:1 1 240px;font-size:14px;line-height:1.85;color:var(--ink2)}
+  .hero-stat p span{color:var(--muted)}
+
+  /* ---------- section ---------- */
+  .sec{margin-top:52px;scroll-margin-top:76px}
+  .sec-head{display:flex;gap:14px;align-items:baseline;padding-top:14px;border-top:1px solid var(--ink)}
+  .sec-head .n{font-family:var(--serif);font-size:12px;letter-spacing:.2em;color:var(--gold);flex:none}
+  .sec-head h2{font-family:var(--serif);font-weight:700;margin:0;font-size:clamp(20px,5.1vw,27px);
+    line-height:1.4;text-wrap:balance;min-width:0}
+  .sec-head .en{display:block;font-family:var(--sans);font-size:10.5px;letter-spacing:.18em;
+    color:var(--muted);font-weight:400;margin-top:6px;text-transform:uppercase}
+  p.t{margin:16px 0 0;font-size:15.5px;line-height:1.92;color:var(--ink2)}
+  p.t b{color:var(--ink);font-weight:600}
+  .red{color:var(--red);font-weight:600}
+  .gold{color:var(--gold);font-weight:600}
+  .quote{margin:20px 0 0;padding:2px 0 2px 16px;border-left:2px solid var(--green);
+    font-family:var(--serif);font-size:17px;line-height:1.85;color:var(--green)}
+  .quote small{display:block;margin-top:8px;font-family:var(--sans);font-size:12px;color:var(--muted);letter-spacing:.04em}
+
+  /* ---------- cards ---------- */
+  .card{margin-top:18px;padding:18px 16px;background:var(--card);border:1px solid var(--line);border-radius:3px}
+  .card-h{display:flex;justify-content:space-between;align-items:baseline;gap:2px 12px;margin-bottom:14px;flex-wrap:wrap}
+  .card-h h3{margin:0;font-family:var(--serif);font-size:14.5px;font-weight:700;letter-spacing:.02em;flex:1 1 auto;min-width:0}
+  .card-h span{font-size:11px;color:var(--muted);letter-spacing:.08em;margin-left:auto;text-align:right}
+
+  /* bars */
+  .bars{display:flex;flex-direction:column;gap:13px}
+  .bar-row{display:grid;grid-template-columns:96px 1fr 66px;gap:10px;align-items:center;font-size:12.5px}
+  .bar-row .bl{color:var(--ink2);line-height:1.3}
+  .track{height:14px;background:var(--track);border-radius:2px;overflow:hidden}
+  .track i{display:block;height:100%;width:0;border-radius:2px;background:var(--green);
+    transition:width 1.15s cubic-bezier(.22,.72,.2,1)}
+  .in .track i{width:var(--w)}
+  .bar-row .bv{text-align:right;font-variant-numeric:tabular-nums;color:var(--ink);font-weight:600;font-size:12.5px}
+  .bar-row.gold .track i{background:var(--gold)}
+  .bar-row.red .track i{background:var(--red)}
+  .bar-row.ghost .track i{background:var(--muted)}
+  .gap-note{display:flex;align-items:center;gap:10px;margin-top:14px;padding-top:12px;
+    border-top:1px dashed var(--line);font-size:12px;color:var(--muted);flex-wrap:wrap}
+  .gap-note b{color:var(--red);font-size:13px;font-variant-numeric:tabular-nums}
+
+  /* stats */
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(148px,1fr));gap:10px;margin-top:18px}
+  @media (max-width:560px){ .stats > *:last-child:nth-child(odd){grid-column:1/-1} }
+  .stat{background:var(--card);border:1px solid var(--line);border-radius:3px;padding:14px 13px}
+  .stat .k{font-size:11px;color:var(--muted);letter-spacing:.06em}
+  .stat .v{font-family:var(--serif);font-size:clamp(22px,6vw,30px);line-height:1.2;margin-top:8px;
+    color:var(--green);font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+  .stat .v.red{color:var(--red)}
+  .stat .v.gold{color:var(--gold)}
+  .stat .d{font-size:11.5px;color:var(--ink2);margin-top:7px;line-height:1.6}
+
+  /* timeline */
+  .tl{list-style:none;margin:18px 0 0;padding:0 0 0 20px;border-left:1px solid var(--line)}
+  .tl li{position:relative;padding:0 0 16px 14px}
+  .tl li:last-child{padding-bottom:0}
+  .tl li::before{content:"";position:absolute;left:-25px;top:7px;width:9px;height:9px;
+    border-radius:50%;background:var(--paper);border:1.5px solid var(--muted)}
+  .tl li.key::before{background:var(--red);border-color:var(--red)}
+  .tl .tm{display:block;font-family:var(--serif);font-size:12px;letter-spacing:.1em;color:var(--gold)}
+  .tl p{margin:3px 0 0;font-size:13.5px;line-height:1.75;color:var(--ink2)}
+  .tl p b{color:var(--ink);font-weight:600}
+
+  /* duo */
+  .duo{display:grid;grid-template-columns:1fr;gap:10px;margin-top:18px}
+  @media (min-width:620px){ .duo{grid-template-columns:1fr 1fr} }
+  .duo-col{border:1px solid var(--line);border-radius:3px;padding:16px 14px;background:var(--card);
+    display:flex;flex-direction:column}
+  .duo-col h4{margin:0 0 4px;font-family:var(--serif);font-size:14px}
+  .duo-col .tag{font-size:10.5px;letter-spacing:.14em;margin-bottom:10px}
+  .duo-col.good .tag{color:var(--green2)}
+  .duo-col.bad .tag{color:var(--red)}
+  .duo-col ul{margin:0;padding:0;list-style:none;flex:1}
+  .duo-col li{font-size:13px;line-height:1.7;color:var(--ink2);padding-left:14px;position:relative;margin-top:8px}
+  .duo-col li::before{content:"";position:absolute;left:0;top:.7em;width:4px;height:4px;border-radius:50%;background:var(--muted)}
+  .duo-col.good{border-top:2px solid var(--green);background:var(--duo-good)}
+  .duo-col.bad{border-top:2px solid var(--red);background:var(--duo-bad)}
+  .duo-foot{margin:14px 0 0;padding-top:11px;border-top:1px solid var(--line);
+    font-family:var(--serif);font-size:13px;letter-spacing:.04em}
+  .duo-col.good .duo-foot{color:var(--green)}
+  .duo-col.bad .duo-foot{color:var(--red)}
+
+  /* finding */
+  .finding{margin-top:20px;padding:22px 16px;border:1px solid var(--ink);border-radius:3px;background:var(--card)}
+  .finding .k{font-size:11px;letter-spacing:.18em;color:var(--muted)}
+  .finding .v{font-family:var(--serif);font-size:clamp(36px,9.6vw,52px);line-height:1;color:var(--red);
+    margin-top:10px;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+  .finding .v .from{color:var(--muted);font-size:.62em;text-decoration:line-through;
+    text-decoration-thickness:1px;letter-spacing:0}
+  .finding .v .arrow{color:var(--muted);font-size:.5em;font-weight:400;vertical-align:.18em;margin:0 .12em}
+  .finding p{margin:12px 0 0;font-size:13px;color:var(--ink2);line-height:1.8}
+
+  /* layers */
+  .layers{margin-top:18px;display:flex;flex-direction:column;gap:0}
+  .layer{display:flex;align-items:center;gap:12px;padding:12px 14px;background:var(--card);
+    border:1px solid var(--line);border-radius:3px}
+  .layer .idx{font-family:var(--serif);font-size:11px;color:var(--gold);letter-spacing:.1em;flex:none}
+  .layer h4{margin:0;font-size:13.5px;font-weight:600}
+  .layer p{margin:2px 0 0;font-size:12px;color:var(--muted);line-height:1.6}
+  .times{text-align:center;font-family:var(--serif);font-size:15px;color:var(--gold);line-height:1;padding:5px 0}
+  .layer-out{margin-top:14px;padding:14px;border:1px dashed var(--red);border-radius:3px;
+    color:var(--red);font-size:13.5px;line-height:1.7;text-align:center}
+  .layer-out b{font-family:var(--serif);font-size:15px}
+
+  /* acts */
+  .acts{display:grid;grid-template-columns:repeat(auto-fit,minmax(232px,1fr));gap:10px;margin-top:18px}
+  .act{background:var(--card);border:1px solid var(--line);border-radius:3px;padding:15px 14px}
+  .act .who{font-family:var(--serif);font-size:13px;color:var(--green);letter-spacing:.06em}
+  .act p{margin:8px 0 0;font-size:13px;line-height:1.8;color:var(--ink2)}
+  .act p b{color:var(--ink);font-weight:600}
+
+  /* spark */
+  .spark{margin-top:16px}
+  .spark svg{width:100%;height:auto;display:block}
+  .spark .cap{display:flex;justify-content:space-between;font-size:10.5px;color:var(--muted);
+    margin-top:6px;letter-spacing:.06em}
+
+  /* callout */
+  .call{margin-top:20px;padding:16px 15px;border-left:3px solid var(--gold);background:var(--call);
+    border-radius:0 3px 3px 0;font-size:13.5px;line-height:1.85;color:var(--ink2)}
+  .call b{color:var(--ink)}
+  .call.red{border-left-color:var(--red);background:var(--duo-bad)}
+
+  /* audit */
+  .audit{margin-top:18px;display:grid;gap:10px}
+  .audit .box{background:var(--card);border:1px solid var(--line);border-radius:3px;padding:15px 14px}
+  .audit .box h4{margin:0 0 8px;font-family:var(--serif);font-size:13.5px;display:flex;align-items:center;gap:8px}
+  .audit .box h4 i{width:7px;height:7px;border-radius:50%;flex:none;display:block}
+  .audit .ok h4 i{background:var(--green)}
+  .audit .warn h4 i{background:var(--gold)}
+  .audit .bad h4 i{background:var(--red)}
+  .audit ul{margin:0;padding:0;list-style:none}
+  .audit li{font-size:13px;line-height:1.75;color:var(--ink2);padding-left:14px;position:relative;margin-top:7px}
+  .audit li::before{content:"—";position:absolute;left:0;color:var(--muted)}
+
+  /* table */
+  .tbl{width:100%;border-collapse:collapse;margin-top:14px;font-size:12.5px}
+  .tbl th{text-align:left;font-weight:600;font-size:11px;letter-spacing:.08em;color:var(--muted);
+    padding:8px 6px;border-bottom:1px solid var(--ink)}
+  .tbl td{padding:9px 6px;border-bottom:1px solid var(--line);color:var(--ink2);vertical-align:top;line-height:1.65}
+  .tbl td b{color:var(--ink)}
+  .tbl td.x{color:var(--red)}
+
+  /* footer */
+  footer{margin-top:56px;padding-top:18px;border-top:1px solid var(--line);font-size:11.5px;
+    color:var(--muted);line-height:1.9}
+  footer b{color:var(--ink2);font-weight:600}
+
+  /* reveal */
+  .rv{opacity:0;transform:translateY(14px);transition:opacity .7s ease,transform .7s cubic-bezier(.22,.72,.2,1)}
+  .rv.in{opacity:1;transform:none}
+  @media (prefers-reduced-motion:reduce){
+    .rv{opacity:1;transform:none;transition:none}
+    .track i{transition:none}
+    html{scroll-behavior:auto}
+  }
+
+  /* ---------- 深色主题（系统深色时启用，避免被浏览器强制反色） ---------- */
+  @media (prefers-color-scheme: dark){
+    :root{
+      --paper:#12110e; --card:#1b1915;
+      --ink:#efe9dc; --ink2:#c6bda9; --muted:#8e8574;
+      --line:#332f26; --green:#7fb79f; --green2:#96c9b2;
+      --red:#e07a6d; --gold:#c9a45f;
+      --track:#2a2620; --duo-good:#17211c; --duo-bad:#241a18; --call:#1f1b13;
+    }
+    body{
+      background:
+        radial-gradient(1100px 620px at 8% -8%, #1a1813 0%, rgba(26,24,19,0) 62%),
+        radial-gradient(900px 520px at 108% 6%, #191712 0%, rgba(25,23,18,0) 58%),
+        var(--paper);
+    }
+    .chapters{background:rgba(18,17,14,.94)}
+  }
+</style>
+</head>
+<body>
+<div class="bar">
+  <div class="progress"><i id="pg"></i></div>
+  <nav class="chapters"><div class="wrap" id="nav">
+    <a class="home" href="index.html">← 全部期数</a>
+    <a href="#s1">本质</a><a href="#s2">账</a><a href="#s3">三步</a>
+    <a href="#s4">两个坑</a><a href="#s5">填进客户端</a><a href="#s6">另一个客户端</a>
+    <a href="#s7">省电策略</a><a href="#s8">明文密钥</a><a href="#s9">可信度</a>
+  </div></nav>
+</div>
+
+<main>
+  <header class="hero">
+    <div class="kicker">
+      <span class="sq"></span><span>配置教程拆解</span><span class="sep"></span>
+      <span>B 站 · 哆啦科技小屋</span><span class="sep"></span><span>2 分 32 秒</span>
+    </div>
+    <h1>签到积分，<br>换成<em>免费 token</em></h1>
+    <p class="deck">
+      不是破解，也不是白嫖：一个签到攒积分的控制台，在你手机上起一个<b>本地网关</b>，
+      把它接的模型（含 DeepSeek V4.1 Flash）转成标准 API，再填进 DSH Go 当自定义渠道。
+      两步就通，但有两个细节容易卡住。
+    </p>
+    <div class="hero-stat">
+      <div class="big">13<small>积分</small></div>
+      <p>UP 主实测：<b>13 积分能跑约 300 万 token</b>，速度是正常速度。
+        新用户送 2000 积分，每天签到再给 100。
+        <span>— 折合下来几乎是白给，代价在别处</span>
+      </p>
+    </div>
+  </header>
+
+  <section class="sec rv" id="s1">
+    <div class="sec-head">
+      <span class="n">01</span>
+      <h2>它到底是什么：一台跑在你手机上的中转<span class="en">A local gateway</span></h2>
+    </div>
+    <p class="t">
+      整件事的结构很简单，看清结构就不会被步骤绕晕：
+    </p>
+    <div class="layers">
+      <div class="layer"><span class="idx">L1</span><div><h4>控制台（WorkBuddy）</h4><p>签到攒积分，用积分调用它接入的模型；它同时能在本机起一个网关服务</p></div></div>
+      <div class="times">↓</div>
+      <div class="layer"><span class="idx">L2</span><div><h4>本地网关</h4><p>把上游模型包装成标准 API：给一个地址 + 一个 API Key，走本机</p></div></div>
+      <div class="times">↓</div>
+      <div class="layer"><span class="idx">L3</span><div><h4>你的客户端</h4><p>DSH Go 等，把 L2 当成「自定义渠道」填进去，之后正常对话</p></div></div>
+      <div class="layer-out">本质：<b>积分换了上游额度，本地网关换了协议</b>——两边都不是你的</div>
+    </div>
+  </section>
+
+  <section class="sec rv" id="s2">
+    <div class="sec-head">
+      <span class="n">02</span>
+      <h2>先算账：为什么这事有吸引力<span class="en">The math</span></h2>
+    </div>
+    <div class="stats">
+      <div class="stat"><div class="k">新用户</div><div class="v">2000 积分</div><div class="d">相当于起步就有约 46 次「13 积分档」的消耗</div></div>
+      <div class="stat"><div class="k">每天签到</div><div class="v">+100 积分</div><div class="d">够跑约 7 次 300 万 token 的量</div></div>
+      <div class="stat"><div class="k">13 积分 ≈</div><div class="v red">300 万</div><div class="d">token，UP 主实测，速度正常</div></div>
+    </div>
+    <div class="call">
+      按这个折算，签到一天的量就远超过普通人一天的对话消耗——<b>所以它真正稀缺的不是额度，是「这个积分规则能维持多久」</b>。
+      这类活动几乎都有有效期和调整条款，视频里没提。
+    </div>
+  </section>
+
+  <section class="sec rv" id="s3">
+    <div class="sec-head">
+      <span class="n">03</span>
+      <h2>三步：起网关、拿钥匙、填进去<span class="en">Three moves</span></h2>
+    </div>
+    <div class="audit">
+      <div class="box ok">
+        <h4><i></i>第一步 · 起网关</h4>
+        <ul>
+          <li>打开控制台，点<b>启动本地网关</b></li>
+          <li>账号 → 添加账号（国内版、国际版都行），登录</li>
+        </ul>
+      </div>
+      <div class="box warn">
+        <h4><i></i>第二步 · 拿两样东西</h4>
+        <ul>
+          <li><b>地址</b>：在网关日志/地址栏里<b>长按复制最后一栏</b></li>
+          <li><b>API Key</b>：控制台设置 → 滑到底 → <b>服务器配置</b> → 复制 api_key</li>
+        </ul>
+      </div>
+      <div class="box ok">
+        <h4><i></i>第三步 · 填进客户端</h4>
+        <ul>
+          <li>DSH Go：菜单 → 设置 → 模型 → <b>添加自定义渠道</b> → 名称 + 地址 + Key → 拉取模型 → 勾选 → 保存</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec rv" id="s4">
+    <div class="sec-head">
+      <span class="n">04</span>
+      <h2>两个卡人的细节：地址要动两刀<span class="en">The address surgery</span></h2>
+    </div>
+    <p class="t">
+      这是全片最容易被忽略、也最容易失败的地方。复制出来的地址<b>不能直接用</b>。
+    </p>
+    <div class="card rv">
+      <div class="card-h"><h3>地址处理顺序</h3><span>错一步就 404</span></div>
+      <div class="layers">
+        <div class="layer"><span class="idx">1</span><div><h4>删掉末尾的 <code>/panel</code></h4><p>那是控制台后台的路径，不是 API 路径</p></div></div>
+        <div class="times">↓</div>
+        <div class="layer"><span class="idx">2</span><div><h4>加上 <code>/v1</code></h4><p>客户端按 OpenAI 兼容格式找 <code>/v1/chat/completions</code></p></div></div>
+        <div class="times">↓</div>
+        <div class="layer"><span class="idx">3</span><div><h4>去掉前面的中文</h4><p>日志行里常带说明文字，只保留纯地址</p></div></div>
+      </div>
+      <div class="gap-note">顺序反了也能改，但先删后加不容易漏</div>
+    </div>
+    <div class="call red">
+      <b>为什么值得单独写一节</b>：这类教程失败的九成，不是模型不行，是地址多一个字符或者少一段路径。
+      排查方法很土但有效——<b>先把地址粘到浏览器里访问一下</b>，能出 JSON 报错就说明路通了。
+    </div>
+  </section>
+
+  <section class="sec rv" id="s5">
+    <div class="sec-head">
+      <span class="n">05</span>
+      <h2>DSH Go 里怎么填<span class="en">In DSH Go</span></h2>
+    </div>
+    <p class="t">
+      路径：左上角菜单 → 设置 → 模型 → 添加自定义渠道。
+    </p>
+    <div class="card rv">
+      <div class="card-h"><h3>填完之后的四步</h3><span>顺序不要跳</span></div>
+      <div class="bars">
+        <div class="bar-row"><span class="bl">拉取模型</span><div class="track"><i style="--w:100%"></i></div><span class="bv">18 个</span></div>
+        <div class="bar-row"><span class="bl">只用 DeepSeek 就勾两个</span><div class="track"><i style="--w:11%"></i></div><span class="bv">2 / 18</span></div>
+        <div class="bar-row"><span class="bl">勾选能力</span><div class="track"><i style="--w:100%"></i></div><span class="bv">文本 + 图片</span></div>
+        <div class="bar-row gold"><span class="bl">打开思考</span><div class="track"><i style="--w:100%"></i></div><span class="bv">最高档</span></div>
+      </div>
+      <div class="gap-note">最后保存；回主页选思考强度，随便发个任务测试</div>
+    </div>
+    <div class="call">
+      <b>「勾选文本和图片」这一步别漏</b>——不勾，模型能对话但发图会失败；这类客户端把「能力」和「模型」分开配，是个常见设计。
+    </div>
+  </section>
+
+  <section class="sec rv" id="s6">
+    <div class="sec-head">
+      <span class="n">06</span>
+      <h2>另一个客户端：同一套地址与 Key<span class="en">Same in the other app</span></h2>
+    </div>
+    <p class="t">
+      流程几乎一样，差别在于入口：新增渠道时选 <b>OpenAI 兼容</b>那一项，地址和 Key 用刚才同一份。
+    </p>
+    <div class="call">
+      填完 → 下滑 → <b>保存并获取模型</b> → 添加模型 → 回到菜单的「配置文件」，把对话模型<b>切换成刚保存的那个</b>。
+      最后这步很多人忘，结果还是用着默认模型。
+    </div>
+  </section>
+
+  <section class="sec rv" id="s7">
+    <div class="sec-head">
+      <span class="n">07</span>
+      <h2>一个必做的系统设置：别让后台被掐<span class="en">Keep it alive</span></h2>
+    </div>
+    <p class="t">
+      因为网关跑在手机上，<b>控制台被系统杀掉 = 整条链路断掉</b>。所以视频里专门让你去改省电策略。
+    </p>
+    <div class="call red">
+      控制台 → 设置 → 滑到底附近找<b>省电策略</b> → 改成<b>无限制</b>，才能让它在后台活着。
+      <br>这一步的副作用要说清：<b>它会常驻后台，更耗电、也可能占内存</b>。这不是免费的。
+    </div>
+  </section>
+
+  <section class="sec rv" id="s8">
+    <div class="sec-head">
+      <span class="n">08</span>
+      <h2>画面里那条警告，比教程本身重要<span class="en">The warning</span></h2>
+    </div>
+    <p class="t">
+      在「服务器配置」那一页，控制台自己写了一句话（画面里的原文意思）：
+    </p>
+    <div class="quote">
+      这份配置包含明文密钥。服务器的 api_key、各类 token 都以明文保存在配置里，本页会原样显示。
+      请勿截图外传；跨网络访问时务必使用 HTTPS 或内网环境。
+      <small>— 控制台「服务器配置」页的提示</small>
+    </div>
+    <div class="audit">
+      <div class="box bad">
+        <h4><i></i>由此推出来的三条</h4>
+        <ul>
+          <li><b>别把 Key 截图发出去</b>——教程视频里演示时会打码，但很多人照做时忘了</li>
+          <li><b>别让网关暴露到公网</b>。默认走本机（127.0.0.1）最安全；一旦为了「别的设备也能用」把端口开放，等于把一个明文 Key 挂到网上</li>
+          <li><b>积分和额度属于那个账号</b>，不是你的。账号被封、活动结束、规则改了，链路当场断，写的东西还在，但工具没了</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec rv" id="s9">
+    <div class="sec-head">
+      <span class="n">09</span>
+      <h2>我的判断：能用，但别当基础设施<span class="en">What holds up</span></h2>
+    </div>
+    <div class="audit">
+      <div class="box ok">
+        <h4><i></i>站得住</h4>
+        <ul>
+          <li><b>技术路径是对的</b>：本地网关 + OpenAI 兼容协议 + 自定义渠道，这套桥接方式在别处也通用，理解了以后换个上游同样能用</li>
+          <li>「13 积分 ≈ 300 万 token」是他自己实测的，给了具体数字，不是空喊</li>
+          <li>把「省电策略改无限制」这种细节讲出来，说明他真踩过</li>
+        </ul>
+      </div>
+      <div class="box warn">
+        <h4><i></i>要打折</h4>
+        <ul>
+          <li><b>这是拉新性质的教程</b>：控制台需要新用户注册，视频本身就是入口；「大肥鱼」这类称呼带着明显的圈子推广味道</li>
+          <li><b>「免费」的期限没交代</b>：2000 积分和每日 100 是活动规则，随时可能变，视频里一个字没提有效期</li>
+          <li>2 分半的视频塞了三个软件的设置路径，<b>跳过和口误的地方不少</b>（我自己转写时就有多处听不清）</li>
+        </ul>
+      </div>
+      <div class="box bad">
+        <h4><i></i>一个反问（视频没回答）</h4>
+        <ul>
+          <li><b>数据去哪了</b>？请求从你手机 → 本地网关 → 上游服务商。中间那一跳看到了什么、存不存，教程不会说。用它跑私密内容要自己判断</li>
+          <li>如果哪天要用它替代付费订阅，<b>你其实把「可用性」押在了一个活动和一份明文配置上</b>——省下的钱，是用稳定性换的</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card rv">
+      <div class="card-h"><h3>转写存疑清单（这段只有 815 字，错得少）</h3><span>Whisper 本地转写</span></div>
+      <table class="tbl">
+        <thead><tr><th>转写原文</th><th>正确内容</th></tr></thead>
+        <tbody>
+          <tr><td class="x">Workbody</td><td><b>WorkBuddy</b>（画面里的应用名）</td></tr>
+          <tr><td class="x">额场 / g 分 / 100 分</td><td>「这边」/ <b>积分</b> / 100 积分</td></tr>
+          <tr><td class="x">DPC 其中的模型</td><td>疑似「API 里的模型」，未核实</td></tr>
+          <tr><td class="x">ASTOBOT / ASTOBOT</td><td>第二个客户端名，<b>未核实</b>（标题里叫「大肥鱼」）</td></tr>
+          <tr><td class="x">沾添 / 或取模型</td><td><b>粘贴</b> / <b>拉取模型</b></td></tr>
+          <tr><td class="x">日子</td><td><b>日志</b>（复制地址的那一栏）</td></tr>
+          <tr><td class="x">请用两个最高单位</td><td>疑似「前面选最高档」，未核实</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="call">
+      <b>一句话总结</b>：这是一条<b>能走、但只该当备胎</b>的路。技术上学到的（本地网关 + 自定义渠道）是长期有用的；
+      依赖它当主力，则是把命门交给别人的活动规则。
+    </div>
+  </section>
+
+  <footer>
+    <p><b>来源</b>　B 站 @哆啦科技小屋《手机养大肥鱼 token 自由教程》2 分 32 秒</p>
+    <p><b>方法</b>　手机本地 Whisper 转写（68 段）＋ 17 张关键帧对照画面校正术语；本页为视觉摘要，非逐字复述</p>
+    <p><b>说明</b>　本页不含任何真实 API Key、网关地址或邀请链接；文中「存疑」条目未经独立核实</p>
+    <p style="margin-top:14px;opacity:.75">白娘子的总结小站 ｜ 整理 · 店小二青青 ｜ 个人自用，不做商业用途 ｜ 2026-11-28</p>
+  </footer>
+</main>
+
+<script>
+(function(){
+  var pg = document.getElementById('pg');
+  function onScroll(){
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    pg.style.transform = 'scaleX(' + (max > 0 ? h.scrollTop / max : 0) + ')';
+  }
+  addEventListener('scroll', onScroll, {passive:true});
+  onScroll();
+  var io = new IntersectionObserver(function(es){
+    es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, {threshold:.14, rootMargin:'0px 0px -8% 0px'});
+  document.querySelectorAll('.rv').forEach(function(el){ io.observe(el); });
+  var links = Array.prototype.slice.call(document.querySelectorAll('#nav a[href^="#s"]'));
+  var secs = links.map(function(a){ return document.querySelector(a.getAttribute('href')); });
+  var navIo = new IntersectionObserver(function(es){
+    es.forEach(function(e){
+      if(!e.isIntersecting) return;
+      var i = secs.indexOf(e.target); if(i < 0) return;
+      links.forEach(function(l){ l.classList.remove('on'); });
+      links[i].classList.add('on');
+      var w = document.querySelector('#nav'), a = links[i];
+      if(w && a){ w.scrollTo({left: a.offsetLeft - w.clientWidth/2 + a.clientWidth/2, behavior:'smooth'}); }
+    });
+  }, {threshold:.01, rootMargin:'-45% 0px -50% 0px'});
+  secs.forEach(function(s){ if(s) navIo.observe(s); });
+})();
+</script>
+</body>
+</html>
